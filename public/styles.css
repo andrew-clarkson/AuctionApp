@@ -1,0 +1,35 @@
+/* .container {
+  height: 100vh;
+} */
+
+.card {
+  width: 400px;
+  padding: 10px;
+  border: 1px solid #eee;
+}
+
+.inner-card {
+  background: #fff;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.heart {
+  cursor: pointer;
+  height: 35px;
+  width: 35px;
+  font-size: 13px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #beb4aa;
+  border-radius: 50%;
+  background-color: #eee;
+}
+
+.btn:focus {
+  color: #fff;
+  background-color: #025ce2;
+  border-color: #0257d5;
+  box-shadow: none;
+}
