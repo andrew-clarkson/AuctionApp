@@ -75,11 +75,11 @@ const Item = (props) => {
         </div>
         <div className="d-flex justify-content-between align-items-center px-2">
           <CurrentBid price={props.price} />
-          <WinStatus win={props.win} />
+          {/* <WinStatus win={props.win} /> */}
         </div>
         <div>
           <TimeLeft time={left} />
-          <HighBidder name="Andrew" />
+          <HighBidder name={props.highBidder} />
           <Button handleClick={sendBid} />
         </div>
       </div>

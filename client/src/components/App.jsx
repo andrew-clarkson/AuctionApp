@@ -4,18 +4,27 @@ import { v4 as uuid } from "uuid";
 import AddItem from "./AddItem";
 
 const App = () => {
+  const [items, setItems] = useState([]);
   //tutorial stuff================================
-  const [data, setData] = useState(null);
+  // const [data, setData] = useState(null);
 
   useEffect(() => {
-    fetch("/api")
+    fetch("/all")
       .then((res) => res.json())
-      .then((data) => setData(data.message));
+      .then((data) => setItems(data));
   }, []);
   //end tutorial stuff============================
 
+  // const getAll = () => {
+  //   fetch("/all")
+  //     .then((res) => res.json())
+  //     .then((data) => setData(data.message));
+  // };
+
+  // getAll();
+  // console.log(data);
+
   // full list of auction items
-  const [items, setItems] = useState([]);
 
   let addItem = () => {
     //creating unique keys for items
@@ -27,8 +36,7 @@ const App = () => {
       title: "Clocks",
       bids: 0,
       price: 0,
-      win: false,
-      timer: "time",
+      highBidder: "Andrew",
       index: items.length + 1,
       img: "https://picsum.photos/400/300",
     };
@@ -44,22 +52,34 @@ const App = () => {
     //creating unique keys for items
     const newKey = uuid();
 
-    let newItem = {
+    let data = {
       key: newKey,
       id: newKey,
       title: item.title,
       bids: 0,
-      price: 0,
-      win: false,
-      timer: "time",
+      price: 0, //store in cents
+      highBidder: "Andrew",
       index: items.length + 1,
       img: item.img,
     };
 
-    //puts at end of list, so the list order changes each bid - fix this
-    setItems(() => {
-      return [...items, newItem];
-    });
+    // fetch("/add", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(data),
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log("Success:", data.bids);
+    //   })
+    //   .catch((error) => {
+    //     console.log("Error:", error);
+    //   });
+
+    //puts at end of list, so the list order changes each bid - fix this in order of closing
+    // setItems(() => {
+    //   return [...items, data];
+    // });
   };
 
   const sendBid = (id) => {
@@ -159,8 +179,8 @@ const App = () => {
       <AddItem addItem={addUserItem} />
 
       <div className="container">
-        <p>{!data ? "Loading..." : data}</p>
-        <h1>
+        {/* <p>{!data ? "Loading..." : data}</p> */}
+        <h4>
           Close Date:{" "}
           {closeDate.toLocaleString("en-US", {
             day: "numeric",
@@ -169,10 +189,10 @@ const App = () => {
             hour: "2-digit",
             minute: "2-digit",
           })}
-        </h1>
-        <h1>Today's Date: {date}</h1>
-        <h1>Time only: {time}</h1>
-        <h1>Time until soft close begins: {left}</h1>
+        </h4>
+        <h4>Today's Date: {date}</h4>
+        <h4>Time only: {time}</h4>
+        <h4>Time until soft close begins: {left}</h4>
         {/* <h1>Local Time: {time}</h1> */}
         {/* <h1>{time.replace("AM", "").replace("PM", "")}</h1> */}
         {/* <h2>{date}</h2> */}
@@ -185,7 +205,7 @@ const App = () => {
             title={item.title}
             bids={item.bids}
             price={item.price}
-            win={item.win}
+            highBidder={item.highBidder}
             timer={item.timer}
             img={item.img}
             index={item.index}
