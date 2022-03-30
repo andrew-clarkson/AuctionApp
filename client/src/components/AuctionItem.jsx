@@ -5,6 +5,7 @@ import CurrentBid from "./CurrentBid";
 import TimeLeft from "./TimeLeft";
 import WinStatus from "./WinStatus";
 import Button from "./Button";
+import HighBidder from "./HighBidder";
 
 const Item = (props) => {
   let sendBid = () => {
@@ -12,13 +13,7 @@ const Item = (props) => {
   };
 
   //START DATETIME
-  const closeDate = new Date(2022, 2, 30, 10, 30, 0).toLocaleString("en-US", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const closeDate = new Date(2022, 3, 2, 10, 30, 0);
 
   const [date, setDate] = useState();
   const [time, setTime] = useState();
@@ -49,7 +44,7 @@ const Item = (props) => {
 
     let now = new Date().getTime();
     // console.log(now);
-    let then = new Date(2022, 2, 30, 10, 30, 0).getTime();
+    let then = closeDate.getTime();
     // console.log(then);
     let dif = then - now + 20 * 1000 * props.index;
     let daysLeft = Math.floor(dif / day);
@@ -69,21 +64,22 @@ const Item = (props) => {
   //END DATETIME
 
   return (
-    <div className="container mt-5 mb-5 d-flex justify-content-center align-items-center">
-      <div className="card">
-        <div className="inner-card">
-          <Photos img={props.img} title={props.title} />
-          <div className="d-flex justify-content-between align-items-center mt-2 px-2">
-            <h5>{props.title}</h5>
-            <span>
-              <BidCount bids={props.bids} />
-            </span>
-          </div>
-          <div className="d-flex justify-content-between align-items-center px-2">
-            <CurrentBid price={props.price} />
-            <WinStatus win={props.win} />
-          </div>
+    <div className="container my-2 px-0 d-flex justify-content-center align-items-center col-sm-12 col-md-6 col-lg-4 col-xl-3 col-xxl-2">
+      <div className="card border-0">
+        <Photos img={props.img} title={props.title} />
+        <div className="d-flex justify-content-between align-items-center mt-2 px-2">
+          <h5>{props.title}</h5>
+          <span>
+            <BidCount bids={props.bids} />
+          </span>
+        </div>
+        <div className="d-flex justify-content-between align-items-center px-2">
+          <CurrentBid price={props.price} />
+          <WinStatus win={props.win} />
+        </div>
+        <div>
           <TimeLeft time={left} />
+          <HighBidder name="Andrew" />
           <Button handleClick={sendBid} />
         </div>
       </div>

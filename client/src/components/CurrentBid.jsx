@@ -1,7 +1,7 @@
 import React from "react";
 
 const CurrentBid = (props) => {
-  return <h3>${props.price}</h3>;
+  return <h5>${props.price}</h5>;
 };
 
 export default CurrentBid;

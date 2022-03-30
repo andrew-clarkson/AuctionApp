@@ -1,8 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AuctionItem from "./AuctionItem";
 import { v4 as uuid } from "uuid";
+import AddItem from "./AddItem";
 
 const App = () => {
+  //tutorial stuff================================
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    fetch("/api")
+      .then((res) => res.json())
+      .then((data) => setData(data.message));
+  }, []);
+  //end tutorial stuff============================
+
   // full list of auction items
   const [items, setItems] = useState([]);
 
@@ -18,8 +29,31 @@ const App = () => {
       price: 0,
       win: false,
       timer: "time",
-      img: "https://picsum.photos/400/300",
       index: items.length + 1,
+      img: "https://picsum.photos/400/300",
+    };
+
+    //puts at end of list, so the list order changes each bid - fix this
+    setItems(() => {
+      return [...items, newItem];
+    });
+  };
+
+  const addUserItem = (item) => {
+    // console.log(item);
+    //creating unique keys for items
+    const newKey = uuid();
+
+    let newItem = {
+      key: newKey,
+      id: newKey,
+      title: item.title,
+      bids: 0,
+      price: 0,
+      win: false,
+      timer: "time",
+      index: items.length + 1,
+      img: item.img,
     };
 
     //puts at end of list, so the list order changes each bid - fix this
@@ -68,13 +102,7 @@ const App = () => {
   // );
 
   //START DATETIME
-  const closeDate = new Date(2022, 2, 30, 10, 30, 0).toLocaleString("en-US", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const closeDate = new Date(2022, 3, 2, 10, 30, 0);
 
   const [date, setDate] = useState();
   const [time, setTime] = useState();
@@ -105,7 +133,7 @@ const App = () => {
 
     let now = new Date().getTime();
     // console.log(now);
-    let then = new Date(2022, 2, 30, 10, 30, 0).getTime();
+    let then = closeDate.getTime();
     // console.log(then);
     let dif = then - now;
     let daysLeft = Math.floor(dif / day);
@@ -125,33 +153,46 @@ const App = () => {
   //END DATETIME
 
   return (
-    <div>
+    <div className="container-fluid">
       <button onClick={addItem}>Add item</button>
 
+      <AddItem addItem={addUserItem} />
+
       <div className="container">
-        <h1>Close Date: {closeDate}</h1>
+        <p>{!data ? "Loading..." : data}</p>
+        <h1>
+          Close Date:{" "}
+          {closeDate.toLocaleString("en-US", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </h1>
         <h1>Today's Date: {date}</h1>
         <h1>Time only: {time}</h1>
-        <h1>Time until Close: {left}</h1>
+        <h1>Time until soft close begins: {left}</h1>
         {/* <h1>Local Time: {time}</h1> */}
         {/* <h1>{time.replace("AM", "").replace("PM", "")}</h1> */}
         {/* <h2>{date}</h2> */}
       </div>
-
-      {items.map((item) => (
-        <AuctionItem
-          key={item.key}
-          id={item.id}
-          title={item.title}
-          bids={item.bids}
-          price={item.price}
-          win={item.win}
-          timer={item.timer}
-          img={item.img}
-          index={item.index}
-          sendBid={sendBid}
-        />
-      ))}
+      <div className="row">
+        {items.map((item) => (
+          <AuctionItem
+            key={item.key}
+            id={item.id}
+            title={item.title}
+            bids={item.bids}
+            price={item.price}
+            win={item.win}
+            timer={item.timer}
+            img={item.img}
+            index={item.index}
+            sendBid={sendBid}
+          />
+        ))}
+      </div>
     </div>
   );
 };
