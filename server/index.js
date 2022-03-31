@@ -14,12 +14,16 @@ const app = express();
 // import { v4 as uuid } from "uuid";
 const { v4: uuid } = require("uuid");
 // const bodyParser = require("body-parser");
+const exp = require("constants");
 
 // app.use(
 //   bodyParser.urlencoded({
 //     extended: true,
 //   })
 // );
+
+// need this to parse the json with the req
+app.use(express.json());
 
 const pass = process.env.DBPASSWORD;
 
@@ -87,9 +91,11 @@ app.get("/api", (req, res) => {
   res.json({ message: "Hello from server!" });
 });
 
-// app.post("/add", (req, res) => {
-//   console.log("Hi", req.body);
-// });
+app.post("/add", (req, res) => {
+  const item = new Item(req.body);
+  console.log(item);
+  item.save();
+});
 
 app.get("/all", (req, res) => {
   Item.find({}, (err, foundItems) => {
