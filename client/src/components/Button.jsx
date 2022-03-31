@@ -9,7 +9,7 @@ const Button = (props) => {
   return (
     <div className="px-2 mt-3">
       <button className="btn btn-success px-3" onClick={onClick}>
-        PLACE A BID
+        {props.name}
       </button>
     </div>
   );

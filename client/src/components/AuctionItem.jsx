@@ -12,29 +12,33 @@ const Item = (props) => {
     props.sendBid(props.id);
   };
 
-  //START DATETIME
-  const closeDate = new Date(2022, 3, 2, 10, 30, 0);
+  let deleteItem = () => {
+    props.deleteItem(props.id);
+  };
 
-  const [date, setDate] = useState();
-  const [time, setTime] = useState();
+  //START DATETIME
+  // const closeDate = new Date(2022, 3, 2, 10, 30, 0);
+
+  // const [date, setDate] = useState();
+  // const [time, setTime] = useState();
   const [left, setleft] = useState();
 
-  let currentDate = () => {
-    setDate(
-      new Date().toLocaleDateString("en-US", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-      })
-    );
-  };
+  // let currentDate = () => {
+  //   setDate(
+  //     new Date().toLocaleDateString("en-US", {
+  //       day: "numeric",
+  //       month: "long",
+  //       year: "numeric",
+  //       hour: "2-digit",
+  //       minute: "2-digit",
+  //       second: "2-digit",
+  //     })
+  //   );
+  // };
 
-  let updateTime = () => {
-    setTime(new Date().toLocaleTimeString());
-  };
+  // let updateTime = () => {
+  //   setTime(new Date().toLocaleTimeString());
+  // };
 
   let timeLeft = () => {
     const minute = 1000 * 60;
@@ -44,7 +48,7 @@ const Item = (props) => {
 
     let now = new Date().getTime();
     // console.log(now);
-    let then = closeDate.getTime();
+    let then = props.closeDate.getTime();
     // console.log(then);
     let dif = then - now + 20 * 1000 * props.index;
     let daysLeft = Math.floor(dif / day);
@@ -52,13 +56,13 @@ const Item = (props) => {
     let minutesLeft = Math.floor((dif / minute) % 60);
     let secondsLeft = Math.floor((dif / 1000) % 60);
 
-    let timer = `${daysLeft} Days, ${hoursLeft}H:${minutesLeft}M:${secondsLeft}S`;
+    let timer = `${daysLeft}D:${hoursLeft}H:${minutesLeft}M:${secondsLeft}S`;
     // let timer2 = dif.toTimeString();
     setleft(timer);
   };
 
-  setInterval(currentDate, 1000);
-  setInterval(updateTime, 1000);
+  // setInterval(currentDate, 1000);
+  // setInterval(updateTime, 1000);
   setInterval(timeLeft, 1000);
 
   //END DATETIME
@@ -80,7 +84,8 @@ const Item = (props) => {
         <div>
           <TimeLeft time={left} />
           <HighBidder name={props.highBidder} />
-          <Button handleClick={sendBid} />
+          <Button handleClick={sendBid} name="PLACE BID" />
+          <Button handleClick={deleteItem} name="DELETE" />
         </div>
       </div>
     </div>

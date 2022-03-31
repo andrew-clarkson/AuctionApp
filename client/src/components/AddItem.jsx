@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 const AddItem = (props) => {
   const [item, setItem] = useState();
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const changeHandler = (event) => {
     let { name, value } = event.target;
@@ -16,7 +17,13 @@ const AddItem = (props) => {
 
   const submitHandler = (event) => {
     props.addItem(item);
-    event.preventDefault();
+    // event.preventDefault();
+  };
+
+  const clickHandler = (event) => {
+    // console.log("click");
+    // isExpanded ? setIsExpanded(false) : setIsExpanded(true);
+    setIsExpanded(true);
   };
 
   return (
@@ -27,21 +34,27 @@ const AddItem = (props) => {
           name="title"
           placeholder="Item Name"
           onChange={changeHandler}
+          onClick={clickHandler}
         />
-        <input
-          className="form-control"
-          name="img"
-          placeholder="ImageURL"
-          onChange={changeHandler}
-        />
-        <textarea
-          className="form-control"
-          name="desc"
-          placeholder="Description"
-          rows="3"
-          onChange={changeHandler}
-        />
-        <button className="btn btn-primary">Add Item</button>
+
+        {isExpanded === true ? (
+          <div>
+            <input
+              className="form-control"
+              name="img"
+              placeholder="ImageURL"
+              onChange={changeHandler}
+            />
+            <textarea
+              className="form-control"
+              name="desc"
+              placeholder="Description"
+              rows="3"
+              onChange={changeHandler}
+            />
+            <button className="btn btn-primary">Add Item</button>
+          </div>
+        ) : null}
       </form>
     </div>
   );

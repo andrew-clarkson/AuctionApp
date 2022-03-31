@@ -33,3 +33,49 @@
   border-color: #0257d5;
   box-shadow: none;
 } */
+
+/* FROM PYTHON SITE */
+
+/* changes background colour on nav and footer */
+.blueback {
+  background-color: #3498db;
+}
+
+/* use to center nav in <a class="navbar-brand text-light" href="{{url_for('get_all_items')}}">CLARKSON AUCTIONS</a> */
+.navbar-brand-centered {
+  position: absolute;
+  left: 50%;
+  margin-left: -50px !important; /* 50% of your logo width */
+  display: block;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* h1 {
+  padding: 2% 0 0 0;
+} */
+
+/* spaces out logo */
+.logo {
+  padding: 3%;
+}
+
+.fixed-bottom {
+  padding: 1% 0 0 0;
+}
+
+.cspace {
+  padding: 1%;
+}
+
+.banner {
+  padding: 4% 0;
+}
+
+.space {
+  padding: 2% 0;
+}
+
+/* END FROM PYTHON SITE */

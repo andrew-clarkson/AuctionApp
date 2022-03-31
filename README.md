@@ -6,3 +6,5 @@ Date() work for countdown
 connected node/express to react
 connected Mongo w mongoose in node
 add item form
+
+query all working, all displaying in main
