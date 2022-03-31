@@ -24,6 +24,7 @@ const exp = require("constants");
 
 // need this to parse the json with the req
 app.use(express.json());
+app.use(express.text());
 
 const pass = process.env.DBPASSWORD;
 
@@ -95,6 +96,18 @@ app.post("/add", (req, res) => {
   const item = new Item(req.body);
   console.log(item);
   item.save();
+});
+
+app.post("/delete", (req, res) => {
+  const itemToDeleteID = req.body;
+  console.log(itemToDeleteID);
+  Item.findOneAndDelete({ id: itemToDeleteID }, (err, deletedItem) => {
+    if (!err) {
+      console.log("deleted: ", deletedItem);
+    } else {
+      console.log("Error: ", err);
+    }
+  });
 });
 
 app.get("/all", (req, res) => {
