@@ -61,7 +61,7 @@ const createItem = () => {
   const item = new Item({
     key: newKey,
     id: newKey,
-    title: "Tire",
+    title: "Sample Item",
     bids: 0,
     price: 0,
     highBidder: "Jack",
@@ -108,6 +108,24 @@ app.post("/delete", (req, res) => {
       console.log("Error: ", err);
     }
   });
+});
+
+app.post("/bid", (req, res) => {
+  let { id, bids, price } = req.body;
+  // console.log(bids);
+  Item.findOneAndUpdate(
+    { id: id },
+    { bids: bids, price: price },
+    (err, foundItem) => {
+      if (!err) {
+        console.log("Updated: ", foundItem.title);
+        //need to send a response else the fetch hangs up
+        res.status(200).json({ success: true });
+      } else {
+        console.log("Error: ", err);
+      }
+    }
+  );
 });
 
 app.get("/all", (req, res) => {

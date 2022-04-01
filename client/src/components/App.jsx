@@ -7,16 +7,16 @@ import Footer from "./Footer";
 
 const App = () => {
   const [items, setItems] = useState([]);
-  //tutorial stuff================================
-  // const [data, setData] = useState(null);
 
-  useEffect(() => {
+  const getAll = () => {
     fetch("/all")
       .then((res) => res.json())
       .then((data) => setItems(data));
-  }, []);
+  };
 
-  //end tutorial stuff============================
+  useEffect(() => {
+    getAll();
+  }, []);
 
   // const getAll = () => {
   //   fetch("/all")
@@ -65,7 +65,7 @@ const App = () => {
       price: 0, //store in cents
       highBidder: "Bobby",
       seller: "seller name",
-      index: items.length + 1,
+      index: items.length + 1, //fix this, no good
       img: item.img,
     };
 
@@ -93,27 +93,66 @@ const App = () => {
   const sendBid = (id) => {
     // pull out item that has been bid on
     let newBid = items.filter((items) => items.id === id);
-    // console.log(newBid[0].bids);
     // deconstruct items to update
     const { bids, price } = newBid[0];
+    // console.log(bids, price);
+    let increase = 0;
 
-    // create array with all other items
-    let curentBids = items.filter((items) => items.id !== id);
+    switch (true) {
+      case price < 10:
+        increase = 1;
+        break;
+      case price < 50:
+        increase = 2.5;
+        break;
+      case price < 100:
+        increase = 5;
+        break;
+      case price < 500:
+        increase = 10;
+        break;
+      case price < 1000:
+        increase = 25;
+        break;
+      case price < 10000:
+        increase = 100;
+        break;
+      default:
+        increase = 500;
+    }
 
-    setItems(() => {
-      return [
-        ...curentBids,
-        {
-          ...newBid[0],
-          bids: bids + 1,
-          price: price + 1,
-        },
-      ];
-    });
+    let updatedBid = {
+      bids: bids + 1,
+      price: price + increase,
+      id: id,
+    };
 
+    fetch("/bid", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedBid),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data); //not showing? I think because promise isnt being handled correctly
+      })
+      .catch((error) => {
+        console.log("Error:", error);
+      });
+
+    // // create array with all other items
+    // let currentBids = items.filter((items) => items.id !== id);
     // setItems(() => {
+    //   return [
+    //     ...currentBids,
+    //     {
+    //       ...newBid[0],
+    //       updatedBid,
+    //     },
+    //   ];
+    // });
 
-    // })
+    getAll();
   };
 
   const deleteItem = (id) => {
@@ -172,6 +211,7 @@ const App = () => {
                 bids={item.bids}
                 price={item.price}
                 highBidder={item.highBidder}
+                seller={item.seller}
                 closeDate={closeDate}
                 img={item.img}
                 index={item.index}

@@ -6,6 +6,7 @@ import TimeLeft from "./TimeLeft";
 import WinStatus from "./WinStatus";
 import Button from "./Button";
 import HighBidder from "./HighBidder";
+import Seller from "./Seller";
 
 const Item = (props) => {
   let sendBid = () => {
@@ -84,6 +85,7 @@ const Item = (props) => {
         <div>
           <TimeLeft time={left} />
           <HighBidder name={props.highBidder} />
+          <Seller name={props.seller} />
           <Button handleClick={sendBid} name="PLACE BID" />
           <Button handleClick={deleteItem} name="DELETE" />
         </div>
