@@ -8,3 +8,5 @@ connected Mongo w mongoose in node
 add item form
 
 query all working, all displaying in main
+
+authentication with google

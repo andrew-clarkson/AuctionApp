@@ -57,7 +57,29 @@ const Item = (props) => {
     let minutesLeft = Math.floor((dif / minute) % 60);
     let secondsLeft = Math.floor((dif / 1000) % 60);
 
-    let timer = `${daysLeft}D:${hoursLeft}H:${minutesLeft}M:${secondsLeft}S`;
+    // let timer =
+    //   daysLeft === 0
+    //     ? `${hoursLeft}H:${minutesLeft}M:${secondsLeft}S`
+    //     : `${daysLeft}D:${hoursLeft}H:${minutesLeft}M:${secondsLeft}S`;
+    let timer = 0;
+    switch (true) {
+      case daysLeft > 0:
+        timer = `${daysLeft}D:${hoursLeft}H:${minutesLeft}M:${secondsLeft}S left`;
+        break;
+      case hoursLeft > 0:
+        timer = `${hoursLeft}H:${minutesLeft}M:${secondsLeft}S left`;
+        break;
+      case minutesLeft > 0:
+        timer = `${minutesLeft}M:${secondsLeft}S left`;
+        break;
+      case secondsLeft > 0:
+        timer = `${secondsLeft}S left`;
+        break;
+      default:
+        timer = `Bidding Closed`;
+    }
+
+    // let timer = `${daysLeft}D:${hoursLeft}H:${minutesLeft}M:${secondsLeft}S`;
     // let timer2 = dif.toTimeString();
     setleft(timer);
   };

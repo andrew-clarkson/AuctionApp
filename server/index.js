@@ -10,11 +10,18 @@ const mongoose = require("mongoose");
 // import "dotenv/config";
 const PORT = process.env.PORT || 3001;
 const app = express();
-
+const pass = process.env.DBPASSWORD;
 // import { v4 as uuid } from "uuid";
 const { v4: uuid } = require("uuid");
 // const bodyParser = require("body-parser");
-const exp = require("constants");
+
+// for passport.js:
+const session = require("express-session");
+const passport = require("passport");
+//passport-local installed, do not have to set
+const passportLocalMongoose = require("passport-local-mongoose");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const findOrCreate = require("mongoose-findorcreate");
 
 // app.use(
 //   bodyParser.urlencoded({
@@ -22,11 +29,21 @@ const exp = require("constants");
 //   })
 // );
 
+//config session for express
+app.use(
+  session({
+    secret: process.env.EXPRESS_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 // need this to parse the json with the req
 app.use(express.json());
 app.use(express.text());
-
-const pass = process.env.DBPASSWORD;
 
 const uri =
   "mongodb+srv://user1:" +
@@ -45,15 +62,64 @@ const itemSchema = new mongoose.Schema({
   id: String,
   title: String,
   bids: Number,
-  price: Number, //will be stored in cents
+  price: Number, //will be stored in cents?
   highBidder: String,
   seller: String,
   index: Number,
   img: String,
 });
 
+const userSchema = new mongoose.Schema({
+  email: String,
+  username: String,
+  password: String,
+  googleId: String,
+  watchList: String,
+});
+
+userSchema.plugin(passportLocalMongoose);
+userSchema.plugin(findOrCreate);
+
 //Model
 const Item = mongoose.model("Item", itemSchema);
+const User = new mongoose.model("User", userSchema);
+
+// CHANGE: USE "createStrategy" INSTEAD OF "authenticate" This is the "simplified" version that creates the locate strat
+passport.use(User.createStrategy());
+
+passport.serializeUser(function (user, cb) {
+  process.nextTick(function () {
+    cb(null, { id: user.id, username: user.username, name: user.displayName });
+  });
+});
+
+passport.deserializeUser(function (user, cb) {
+  process.nextTick(function () {
+    return cb(null, user);
+  });
+});
+
+let userDetails = {};
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "http://localhost:3001/auth/google/callback",
+    },
+    function (accessToken, refreshToken, profile, cb) {
+      console.log(profile);
+      User.findOrCreate(
+        { googleId: profile.id, username: profile.displayName },
+        function (err, user) {
+          userDetails = profile;
+          return cb(err, user);
+        }
+      );
+    }
+  )
+);
 
 const createItem = () => {
   //creating unique keys for items
@@ -88,8 +154,73 @@ const sendItem = () => {
 // Have Node serve the files for our built React app
 app.use(express.static(path.resolve(__dirname, "../client/build")));
 
+const loggedIn = (req, res, next) => {
+  if (req.user) {
+    next();
+  } else {
+    console.log("not logged in");
+    // res.redirect('/login');
+  }
+};
+
+//ROUTES
+
 app.get("/api", (req, res) => {
   res.json({ message: "Hello from server!" });
+});
+
+app.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile"] })
+);
+
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "http://localhost:3000" }), //add a failure to login notification
+  function (req, res) {
+    // Successful authentication, redirect to secrets
+    res.redirect("http://localhost:3000");
+  }
+);
+
+// app.post("/login", (req, res) => {
+//   let { username, password } = req.body;
+//   const user = new User({
+//     username: username,
+//     password: password,
+//   });
+
+//   req.login(user, function (err) {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       passport.authenticate("local")(req, res, function () {
+//         res.redirect("/secrets");
+//         console.log(req.user);
+//       });
+//     }
+//   });
+// });
+
+// app.post("/register", (req, res) => {
+//   let { username, password } = req.body;
+
+//   User.register({ username: username }, password, function (err, user) {
+//     if (err) {
+//       console.log(err);
+//       res.redirect("/register");
+//     } else {
+//       passport.authenticate("local")(req, res, function () {
+//         res.redirect("/secrets");
+//       });
+//     }
+//   });
+// });
+
+app.get("/logout", function (req, res) {
+  userDetails = {};
+  req.logOut();
+  res.redirect("http://localhost:3000/");
 });
 
 app.post("/add", (req, res) => {
@@ -104,6 +235,7 @@ app.post("/delete", (req, res) => {
   Item.findOneAndDelete({ id: itemToDeleteID }, (err, deletedItem) => {
     if (!err) {
       console.log("deleted: ", deletedItem);
+      res.status(200).json({ success: true });
     } else {
       console.log("Error: ", err);
     }
@@ -129,6 +261,7 @@ app.post("/bid", (req, res) => {
 });
 
 app.get("/all", (req, res) => {
+  // console.log(loggedIn);
   Item.find({}, (err, foundItems) => {
     if (!err) {
       // console.log(foundItems);
@@ -137,6 +270,15 @@ app.get("/all", (req, res) => {
       console.log(err);
     }
   });
+});
+
+app.get("/loggedin", loggedIn, (req, res, next) => {
+  res.send(req.user);
+});
+
+app.get("/getuser", (req, res) => {
+  // console.log(userDetails);
+  res.send(userDetails);
 });
 
 app.listen(PORT, () => {

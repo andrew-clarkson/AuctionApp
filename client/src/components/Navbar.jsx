@@ -1,6 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 
-const Navbar = () => {
+const Navbar = (props) => {
+  let loginClickHandler = () => {
+    props.handleLoginClick();
+  };
+
+  // console.log("user:", props.user);
+
   return (
     <nav className="navbar navbar-brand-center sticky-top navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
@@ -27,34 +33,37 @@ const Navbar = () => {
                 Add Item
               </a>
             </li>
-            <li className="nav-item">
-              <a className="nav-link text-light" href="#">
-                Admin
-              </a>
-            </li>
-            {/* {% endif %} */}
 
-            {/* {% if current_user.is_anonymous: %} */}
-            <li className="nav-item">
-              <a className="nav-link text-light" href="#">
-                Register
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link text-light" href="#">
-                Login
-              </a>
-            </li>
-            {/* {% endif %} */}
+            {!props.user && (
+              <li className="nav-item">
+                <a className="nav-link text-light" href="#">
+                  Register
+                </a>
+              </li>
+            )}
 
-            {/* {% if current_user.is_authenticated: %} */}
+            {!props.user && (
+              <li onClick={loginClickHandler} className="nav-item">
+                <a className="nav-link text-light" href="#">
+                  Login
+                </a>
+              </li>
+            )}
+
+            {props.user && (
+              <li className="nav-item">
+                <a
+                  className="nav-link text-light"
+                  href="http://localhost:3001/logout"
+                >
+                  Log Out
+                </a>
+              </li>
+            )}
             <li className="nav-item">
-              <a className="nav-link text-light" href="#">
-                Log Out
+              <a className="nav-link text-light fw-bold">
+                {props.user && `Welcome ${props.user.username}`}
               </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link text-light fw-bold">Welcome name</a>
             </li>
             {/* {% endif %} */}
           </ul>

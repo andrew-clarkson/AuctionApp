@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import AuctionItem from "./AuctionItem";
 import { v4 as uuid } from "uuid";
 import AddItem from "./AddItem";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import LoginForm from "./LoginForm";
+// const UserContext = createContext();
 
 const App = () => {
   const [items, setItems] = useState([]);
+  const [isShowLogin, setIsShowLogin] = useState(false);
+  const [user, setUser] = useState({});
+  const [loggedIn, setLoggedIn] = useState();
 
   const getAll = () => {
     fetch("/all")
@@ -14,10 +19,25 @@ const App = () => {
       .then((data) => setItems(data));
   };
 
+  // const getUser = () => {
+  //   fetch("/getuser")
+  //     .then((res) => res.json())
+  //     .then((data) => setUser(data));
+  // };
+
+  const isLoggedIn = () => {
+    fetch("/loggedin")
+      .then((res) => res.json())
+      .then((data) => setLoggedIn(data));
+  };
+
   useEffect(() => {
     getAll();
+    // getUser();
+    isLoggedIn();
   }, []);
 
+  console.log(loggedIn);
   // const getAll = () => {
   //   fetch("/all")
   //     .then((res) => res.json())
@@ -169,15 +189,24 @@ const App = () => {
       .catch((error) => {
         console.log("Error:", error);
       });
+    getAll();
   };
 
   //
-  const closeDate = new Date(2022, 3, 2, 10, 30, 0);
+  const closeDate = new Date(2022, 3, 1, 14, 20, 0);
   //
+
+  const handleLoginClick = () => {
+    setIsShowLogin(!isShowLogin);
+    console.log(isShowLogin);
+  };
 
   return (
     <div>
-      <Navbar />
+      <Navbar user={loggedIn} handleLoginClick={handleLoginClick} />
+      {isShowLogin ? (
+        <LoginForm isShowLogin={isShowLogin} closeHandler={handleLoginClick} />
+      ) : null}
       <div className="container-fluid">
         {/* <button onClick={addItem}>Add item</button> */}
 
@@ -200,6 +229,7 @@ const App = () => {
           {/* <h1>{time.replace("AM", "").replace("PM", "")}</h1> */}
           {/* <h2>{date}</h2> */}
         </div>
+
         <AddItem addItem={addUserItem} />
         <div className="row">
           {items

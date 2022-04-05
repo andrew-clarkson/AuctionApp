@@ -79,3 +79,28 @@ html {
 }
 
 /* END FROM PYTHON SITE */
+
+/* login animation */
+/* .show {
+  display: block;
+  transition: 800ms;
+  opacity: 1;
+}
+
+.show.active {
+  transform: translateY(100px) scale(0) rotateY(180deg);
+  opacity: 0;
+} */
+
+#main-holder {
+  width: 40%;
+  height: 40%;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 7px;
+  box-shadow: 0px 0px 5px 2px black;
+  position: fixed;
+  z-index: 1;
+}
