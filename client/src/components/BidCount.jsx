@@ -1,7 +1,7 @@
 import React from "react";
 
 const BidCount = (props) => {
-  return <p>{props.bids} Bids</p>;
+  return <h6>{props.bids} Bids</h6>;
 };
 
 export default BidCount;

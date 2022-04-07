@@ -2,9 +2,9 @@ import React from "react";
 
 const Seller = (props) => {
   return (
-    <p className="d-flex justify-content-between align-items-center px-2">
-      Seller: {props.name}
-    </p>
+    <div className="d-flex justify-content-between align-items-center my-0">
+      <h6 className="">Seller: {props.name}</h6>
+    </div>
   );
 };
 

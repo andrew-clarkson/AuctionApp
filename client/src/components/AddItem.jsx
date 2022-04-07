@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const AddItem = (props) => {
-  const [item, setItem] = useState();
+  const [item, setItem] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
 
   const changeHandler = (event) => {
@@ -17,6 +17,8 @@ const AddItem = (props) => {
 
   const submitHandler = (event) => {
     props.addItem(item);
+    setItem("");
+    //need a refresh here to add new item immediately
     // event.preventDefault();
   };
 
@@ -35,6 +37,7 @@ const AddItem = (props) => {
           placeholder="Item Name"
           onChange={changeHandler}
           onClick={clickHandler}
+          value={item.title || ""}
         />
 
         {isExpanded === true ? (
@@ -44,6 +47,7 @@ const AddItem = (props) => {
               name="img"
               placeholder="ImageURL"
               onChange={changeHandler}
+              value={item.img || ""}
             />
             <textarea
               className="form-control"
@@ -51,6 +55,7 @@ const AddItem = (props) => {
               placeholder="Description"
               rows="3"
               onChange={changeHandler}
+              value={item.desc || ""}
             />
             <button className="btn btn-primary">Add Item</button>
           </div>

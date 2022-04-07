@@ -2,9 +2,9 @@ import React from "react";
 
 const HighBidder = (props) => {
   return (
-    <p className="d-flex justify-content-between align-items-center px-2">
-      High Bidder: {props.name}
-    </p>
+    <div className="d-flex justify-content-between align-items-center my-0">
+      <h6 className="">High Bidder: {props.name}</h6>
+    </div>
   );
 };
 

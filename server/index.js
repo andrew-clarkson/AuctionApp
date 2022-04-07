@@ -65,7 +65,6 @@ const itemSchema = new mongoose.Schema({
   price: Number, //will be stored in cents?
   highBidder: String,
   seller: String,
-  index: Number,
   img: String,
 });
 
@@ -227,9 +226,10 @@ app.post("/add", (req, res) => {
   const item = new Item(req.body);
   console.log(item);
   item.save();
+  //add response here, check others
 });
 
-app.post("/delete", (req, res) => {
+app.post("/delete", loggedIn, (req, res, next) => {
   const itemToDeleteID = req.body;
   console.log(itemToDeleteID);
   Item.findOneAndDelete({ id: itemToDeleteID }, (err, deletedItem) => {
@@ -242,22 +242,35 @@ app.post("/delete", (req, res) => {
   });
 });
 
-app.post("/bid", (req, res) => {
+app.post("/bid", loggedIn, (req, res, next) => {
   let { id, bids, price } = req.body;
-  // console.log(bids);
-  Item.findOneAndUpdate(
-    { id: id },
-    { bids: bids, price: price },
-    (err, foundItem) => {
-      if (!err) {
-        console.log("Updated: ", foundItem.title);
-        //need to send a response else the fetch hangs up
-        res.status(200).json({ success: true });
+  // console.log(req.user.username);
+  //CHANGE THIS TO CHECK ID NOT NAME
+  Item.find({ id: id }, (err, foundItem) => {
+    if (!err) {
+      console.log("Found: ", foundItem[0].highBidder);
+      if (foundItem[0].highBidder != req.user.username) {
+        console.log(foundItem.highBidder, req.user.username);
+        Item.findOneAndUpdate(
+          { id: id },
+          { bids: bids, price: price, highBidder: req.user.username },
+          (err, foundItem) => {
+            if (!err) {
+              console.log("Updated: ", foundItem.title);
+              //need to send a response else the fetch hangs up
+              res.status(200).json({ success: true });
+            } else {
+              console.log("Error: ", err);
+            }
+          }
+        );
       } else {
-        console.log("Error: ", err);
+        res.status(200).json({ success: true });
       }
+    } else {
+      console.log("Error: ", err);
     }
-  );
+  });
 });
 
 app.get("/all", (req, res) => {

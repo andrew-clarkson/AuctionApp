@@ -9,8 +9,8 @@ import LoginForm from "./LoginForm";
 
 const App = () => {
   const [items, setItems] = useState([]);
-  const [isShowLogin, setIsShowLogin] = useState(false);
-  const [user, setUser] = useState({});
+  // const [isShowLogin, setIsShowLogin] = useState(false);
+  // const [user, setUser] = useState({});
   const [loggedIn, setLoggedIn] = useState();
 
   const getAll = () => {
@@ -37,7 +37,9 @@ const App = () => {
     isLoggedIn();
   }, []);
 
-  console.log(loggedIn);
+  // if (loggedIn) {
+  //   console.log(loggedIn.username);
+  // }
   // const getAll = () => {
   //   fetch("/all")
   //     .then((res) => res.json())
@@ -84,8 +86,7 @@ const App = () => {
       bids: 0,
       price: 0, //store in cents
       highBidder: "Bobby",
-      seller: "seller name",
-      index: items.length + 1, //fix this, no good
+      seller: loggedIn.username,
       img: item.img,
     };
 
@@ -154,7 +155,8 @@ const App = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Success:", data); //not showing? I think because promise isnt being handled correctly
+        console.log("Success:", data);
+        getAll(); //this makes it refresh immediately - ok tho?
       })
       .catch((error) => {
         console.log("Error:", error);
@@ -171,8 +173,6 @@ const App = () => {
     //     },
     //   ];
     // });
-
-    getAll();
   };
 
   const deleteItem = (id) => {
@@ -193,21 +193,22 @@ const App = () => {
   };
 
   //
-  const closeDate = new Date(2022, 3, 1, 14, 20, 0);
+  const closeDate = new Date(2022, 3, 7, 14, 20, 0);
   //
 
-  const handleLoginClick = () => {
-    setIsShowLogin(!isShowLogin);
-    console.log(isShowLogin);
-  };
+  // const handleLoginClick = () => {
+  //   setIsShowLogin(!isShowLogin);
+  //   console.log(isShowLogin);
+  // };
 
   return (
     <div>
-      <Navbar user={loggedIn} handleLoginClick={handleLoginClick} />
-      {isShowLogin ? (
+      <Navbar user={loggedIn} />
+      {/* {isShowLogin ? (
         <LoginForm isShowLogin={isShowLogin} closeHandler={handleLoginClick} />
-      ) : null}
-      <div className="container-fluid">
+      ) : null} */}
+
+      <div className="container ">
         {/* <button onClick={addItem}>Add item</button> */}
 
         <div className="container">
@@ -231,9 +232,10 @@ const App = () => {
         </div>
 
         <AddItem addItem={addUserItem} />
+
         <div className="row">
           {items
-            .map((item) => (
+            .map((item, index) => (
               <AuctionItem
                 key={item.key}
                 id={item.id}
@@ -244,9 +246,10 @@ const App = () => {
                 seller={item.seller}
                 closeDate={closeDate}
                 img={item.img}
-                index={item.index}
+                index={index}
                 sendBid={sendBid}
                 deleteItem={deleteItem}
+                user={loggedIn}
               />
             ))
             .sort()}
