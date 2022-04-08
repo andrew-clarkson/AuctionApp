@@ -88,7 +88,8 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/auth/google/callback",
+      callbackURL:
+        "https://react-auction-app.herokuapp.com/auth/google/callback",
     },
     function (accessToken, refreshToken, profile, cb) {
       User.findOrCreate(
@@ -110,6 +111,7 @@ const loggedIn = (req, res, next) => {
   if (req.user) {
     next();
   } else {
+    /// res here
   }
 };
 
@@ -193,6 +195,8 @@ app.post("/delete", loggedIn, (req, res, next) => {
             console.log("Error: ", err);
           }
         });
+      } else {
+        console.log("Error: ", err);
       }
     } else {
       console.log("Error: ", err);
@@ -247,9 +251,7 @@ app.post("/login", (req, res) => {
 app.post("/logout", function (req, res) {
   // userDetails = {};
   req.logOut();
-  req.session.destroy(function (err) {
-    res.redirect("/");
-  });
+  res.redirect("/");
 });
 
 app.post("/register", (req, res) => {
@@ -268,7 +270,7 @@ app.post("/register", (req, res) => {
 });
 
 // catchall route
-app.get("*", (req, res) => {
+app.get("/*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
 });
 

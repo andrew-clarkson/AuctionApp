@@ -7,7 +7,7 @@ const Navbar = (props) => {
     <div>
       <nav className="navbar navbar-brand-center sticky-top navbar-expand-lg navbar-dark ">
         <div className="container">
-          <a className="navbar-brand fs-2 text-light" href="#">
+          <a className="navbar-brand fs-2 text-light" href="/">
             AUCTIONAPP <i className="fa-solid fa-gavel"></i>
           </a>
           <button
