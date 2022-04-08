@@ -53,11 +53,6 @@ const RegisterForm = (props) => {
   };
 
   const loginHandler = () => {
-    // let data = {
-    //   email: data.username,
-    //   password: data.password,
-    // };
-
     fetch("/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

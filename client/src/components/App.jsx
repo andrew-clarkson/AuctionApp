@@ -9,8 +9,6 @@ import LoginForm from "./RegisterForm";
 
 const App = () => {
   const [items, setItems] = useState([]);
-  // const [isShowLogin, setIsShowLogin] = useState(false);
-  // const [user, setUser] = useState({});
   const [loggedIn, setLoggedIn] = useState();
 
   const getAll = () => {
@@ -18,12 +16,6 @@ const App = () => {
       .then((res) => res.json())
       .then((data) => setItems(data));
   };
-
-  // const getUser = () => {
-  //   fetch("/getuser")
-  //     .then((res) => res.json())
-  //     .then((data) => setUser(data));
-  // };
 
   //candidate for useEffect?
   const isLoggedIn = () => {
@@ -34,16 +26,12 @@ const App = () => {
 
   useEffect(() => {
     getAll();
-    // getUser();
     isLoggedIn();
   }, []);
 
   const sendBid = (itemID) => {
-    // pull out item that has been bid on
     let newBid = items.filter((items) => items.id === itemID);
-    // deconstruct items to update
     const { bids, price } = newBid[0];
-    // console.log(bids, price);
     let increase = 0;
 
     switch (true) {
@@ -92,7 +80,6 @@ const App = () => {
   };
 
   const deleteItem = (id) => {
-    // console.log(id);
     fetch("/delete", {
       method: "POST",
       headers: { "Content-Type": "text/plain" },
