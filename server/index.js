@@ -6,8 +6,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 // for passport.js:
-const session = require("express-session");
-const cookieSession = require("cookie-session");
+// const session = require("express-session");
+const session = require("cookie-session");
 const passport = require("passport");
 //passport-local installed, do not have to set
 const passportLocalMongoose = require("passport-local-mongoose");
@@ -18,22 +18,22 @@ const uri = process.env.MONGO_URI;
 const PORT = process.env.PORT || 3001;
 // let userDetails = {};
 
-// //config session for express
-// app.use(
-//   session({
-//     secret: process.env.EXPRESS_SECRET,
-//     resave: false,
-//     saveUninitialized: true,
-//   })
-// );
-
-//use this instead of above
+//config session for express
 app.use(
-  cookieSession({
-    name: "session",
+  session({
     secret: process.env.EXPRESS_SECRET,
+    resave: false,
+    saveUninitialized: true,
   })
 );
+
+// //use this instead of above
+// app.use(
+//   cookieSession({
+//     name: "session",
+//     secret: process.env.EXPRESS_SECRET,
+//   })
+// );
 
 app.use(passport.initialize());
 app.use(passport.session());
