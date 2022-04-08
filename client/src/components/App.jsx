@@ -1,7 +1,5 @@
 import React, { useState, useEffect, createContext } from "react";
 import AuctionItem from "./AuctionItem";
-import { v4 as uuid } from "uuid";
-import AddItem from "./AddItem";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import LoginForm from "./RegisterForm";

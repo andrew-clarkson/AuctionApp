@@ -13,9 +13,9 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const findOrCreate = require("mongoose-findorcreate");
 
-const uri = process.env.MONGO_URI;
+const pass = process.env.DBPASSWORD;
 const PORT = process.env.PORT || 3001;
-// let userDetails = {};
+let userDetails = {};
 
 //config session for express
 app.use(
@@ -34,6 +34,11 @@ app.use(express.json());
 app.use(express.text());
 
 //connect to Mongo
+const uri =
+  "mongodb+srv://user1:" +
+  pass +
+  "@tallsoup.428jc.mongodb.net/AuctionDB4?retryWrites=true&w=majority";
+
 mongoose
   .connect(uri)
   .then(() => console.log("Now connected to MongoDB!"))
@@ -88,14 +93,13 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL:
-        "https://react-auction-app.herokuapp.com/auth/google/callback",
+      callbackURL: "http://localhost:3001/auth/google/callback",
     },
     function (accessToken, refreshToken, profile, cb) {
       User.findOrCreate(
         { googleId: profile.id, username: profile.displayName },
         function (err, user) {
-          // userDetails = profile;
+          userDetails = profile;
           return cb(err, user);
         }
       );
@@ -103,15 +107,11 @@ passport.use(
   )
 );
 
-// Have Node serve the files for React app
-app.use(express.static(path.resolve(__dirname, "../client/build")));
-
 // check if logged in
 const loggedIn = (req, res, next) => {
   if (req.user) {
     next();
   } else {
-    /// res here
   }
 };
 
@@ -124,11 +124,9 @@ app.get(
 
 app.get(
   "/auth/google/callback",
-  passport.authenticate("google", {
-    failureRedirect: "/",
-  }),
+  passport.authenticate("google", { failureRedirect: "http://localhost:3000" }),
   function (req, res) {
-    res.redirect("/");
+    res.redirect("http://localhost:3000");
   }
 );
 
@@ -195,8 +193,6 @@ app.post("/delete", loggedIn, (req, res, next) => {
             console.log("Error: ", err);
           }
         });
-      } else {
-        console.log("Error: ", err);
       }
     } else {
       console.log("Error: ", err);
@@ -242,16 +238,17 @@ app.post("/login", (req, res) => {
       console.log(err);
     } else {
       passport.authenticate("local")(req, res, function () {
-        res.redirect("/");
+        res.redirect("http://localhost:3000");
+        console.log(req.user);
       });
     }
   });
 });
 
-app.post("/logout", function (req, res) {
-  // userDetails = {};
+app.get("/logout", function (req, res) {
+  userDetails = {};
   req.logOut();
-  res.redirect("/");
+  res.redirect("http://localhost:3000");
 });
 
 app.post("/register", (req, res) => {
@@ -263,16 +260,24 @@ app.post("/register", (req, res) => {
       console.log(err);
     } else {
       passport.authenticate("local")(req, res, function () {
-        res.redirect("/");
+        res.redirect("http://localhost:3000");
       });
     }
   });
 });
 
-// catchall route
-app.get("/*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
-});
+//Serve static if in prod - used to call build in heroku
+if (process.env.NODE_ENV === "production") {
+  //set static folder
+  app.use(express.static("client/build"));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
+
+// // Have Node serve the files for React app
+// app.use(express.static(path.resolve(__dirname, "../client/build")));
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

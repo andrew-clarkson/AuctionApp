@@ -5,9 +5,9 @@ import RegisterForm from "./RegisterForm";
 const Navbar = (props) => {
   return (
     <div>
-      <nav className="navbar navbar-brand-center sticky-top navbar-expand-lg navbar-dark ">
+      <nav className="navbar navbar-brand-center sticky-top navbar-expand-lg ">
         <div className="container">
-          <a className="navbar-brand fs-2 text-light" href="/">
+          <a className="navbar-brand fs-2 text-light" href="#">
             AUCTIONAPP <i className="fa-solid fa-gavel"></i>
           </a>
           <button
@@ -19,9 +19,7 @@ const Navbar = (props) => {
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-            <span className="">
-              <i class="text-light fa-solid fa-circle-chevron-down fa-lg"></i>
-            </span>
+            <span className="navbar-toggler-icon"></span>
           </button>
 
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
@@ -52,7 +50,10 @@ const Navbar = (props) => {
 
               {props.user && (
                 <li className="nav-item">
-                  <a className="nav-link text-light" href="/logout">
+                  <a
+                    className="nav-link text-light"
+                    href="http://localhost:3001/logout"
+                  >
                     Log Out
                   </a>
                 </li>

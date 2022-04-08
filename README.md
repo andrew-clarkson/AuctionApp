@@ -14,3 +14,5 @@ authentication with google
 modals
 
 importance of detailed plan/design
+
+deployment issues!
