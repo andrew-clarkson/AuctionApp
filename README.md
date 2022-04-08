@@ -10,3 +10,7 @@ add item form
 query all working, all displaying in main
 
 authentication with google
+
+modals
+
+importance of detailed plan/design

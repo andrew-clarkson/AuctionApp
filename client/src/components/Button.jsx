@@ -1,7 +1,7 @@
 import React from "react";
 
 const Button = (props) => {
-  const onClick = (event) => {
+  const clickHandler = () => {
     props.handleClick();
     // event.preventDefault();
   };
@@ -10,7 +10,7 @@ const Button = (props) => {
     <div className="my-1">
       <button
         className={`btn btn-sm btn-outline-${props.color} px-3`}
-        onClick={onClick}
+        onClick={clickHandler}
       >
         {props.name}
       </button>

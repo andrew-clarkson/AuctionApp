@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 import AddItem from "./AddItem";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import LoginForm from "./LoginForm";
+import LoginForm from "./RegisterForm";
 // const UserContext = createContext();
 
 const App = () => {
@@ -25,6 +25,7 @@ const App = () => {
   //     .then((data) => setUser(data));
   // };
 
+  //candidate for useEffect?
   const isLoggedIn = () => {
     fetch("/loggedin")
       .then((res) => res.json())
@@ -37,83 +38,9 @@ const App = () => {
     isLoggedIn();
   }, []);
 
-  // if (loggedIn) {
-  //   console.log(loggedIn.username);
-  // }
-  // const getAll = () => {
-  //   fetch("/all")
-  //     .then((res) => res.json())
-  //     .then((data) => setData(data.message));
-  // };
-
-  // getAll();
-  // console.log(data);
-
-  // full list of auction items
-
-  // let addItem = () => {
-  //   //creating unique keys for items
-  //   const newKey = uuid();
-
-  //   let newItem = {
-  //     key: newKey,
-  //     id: newKey,
-  //     title: "Clocks",
-  //     bids: 0,
-  //     price: 0,
-  //     highBidder: "Andrew",
-  //     index: items.length + 1,
-  //     img: "https://picsum.photos/400/300",
-  //   };
-
-  //   // console.log(newItem);
-
-  //   //puts at end of list, so the list order changes each bid - fix this
-  //   setItems(() => {
-  //     return [...items, newItem];
-  //   });
-  // };
-
-  const addUserItem = (item) => {
-    // console.log("add clicked");
-    //creating unique keys for items
-    const newKey = uuid();
-
-    let data = {
-      key: newKey,
-      id: newKey,
-      title: item.title,
-      bids: 0,
-      price: 0, //store in cents
-      highBidder: "Bobby",
-      seller: loggedIn.username,
-      img: item.img,
-    };
-
-    console.log(data);
-
-    fetch("/add", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Success:", data);
-      })
-      .catch((error) => {
-        console.log("Error:", error);
-      });
-
-    //puts at end of list, so the list order changes each bid - fix this in order of closing
-    // setItems(() => {
-    //   return [...items, data];
-    // });
-  };
-
-  const sendBid = (id) => {
+  const sendBid = (itemID) => {
     // pull out item that has been bid on
-    let newBid = items.filter((items) => items.id === id);
+    let newBid = items.filter((items) => items.id === itemID);
     // deconstruct items to update
     const { bids, price } = newBid[0];
     // console.log(bids, price);
@@ -124,7 +51,7 @@ const App = () => {
         increase = 1;
         break;
       case price < 50:
-        increase = 2.5;
+        increase = 2;
         break;
       case price < 100:
         increase = 5;
@@ -145,7 +72,8 @@ const App = () => {
     let updatedBid = {
       bids: bids + 1,
       price: price + increase,
-      id: id,
+      id: itemID,
+      highBidderID: loggedIn.id,
     };
 
     fetch("/bid", {
@@ -161,18 +89,6 @@ const App = () => {
       .catch((error) => {
         console.log("Error:", error);
       });
-
-    // // create array with all other items
-    // let currentBids = items.filter((items) => items.id !== id);
-    // setItems(() => {
-    //   return [
-    //     ...currentBids,
-    //     {
-    //       ...newBid[0],
-    //       updatedBid,
-    //     },
-    //   ];
-    // });
   };
 
   const deleteItem = (id) => {
@@ -193,45 +109,25 @@ const App = () => {
   };
 
   //
-  const closeDate = new Date(2022, 3, 7, 14, 20, 0);
+  const closeDate = new Date(2022, 3, 9, 14, 20, 0);
   //
-
-  // const handleLoginClick = () => {
-  //   setIsShowLogin(!isShowLogin);
-  //   console.log(isShowLogin);
-  // };
 
   return (
     <div>
       <Navbar user={loggedIn} />
-      {/* {isShowLogin ? (
-        <LoginForm isShowLogin={isShowLogin} closeHandler={handleLoginClick} />
-      ) : null} */}
-
       <div className="container ">
-        {/* <button onClick={addItem}>Add item</button> */}
-
         <div className="container">
-          {/* <p>{!data ? "Loading..." : data}</p> */}
-          <h4>
-            Soft Close Begins at:{" "}
+          <h4 className="text-center">Auction Close begins at:</h4>
+          <h5 className="text-center">
             {closeDate.toLocaleString("en-US", {
               day: "numeric",
               month: "long",
               year: "numeric",
-              hour: "2-digit",
+              hour: "numeric",
               minute: "2-digit",
             })}
-          </h4>
-          {/* <h4>Today's Date: {date}</h4> */}
-          {/* <h4>Time only: {time}</h4> */}
-          {/* <h4>Time until soft close begins: {left}</h4> */}
-          {/* <h1>Local Time: {time}</h1> */}
-          {/* <h1>{time.replace("AM", "").replace("PM", "")}</h1> */}
-          {/* <h2>{date}</h2> */}
+          </h5>
         </div>
-
-        <AddItem addItem={addUserItem} />
 
         <div className="row">
           {items
@@ -243,7 +139,9 @@ const App = () => {
                 bids={item.bids}
                 price={item.price}
                 highBidder={item.highBidder}
+                highBidderId={item.highBidderId}
                 seller={item.seller}
+                sellerId={item.sellerId}
                 closeDate={closeDate}
                 img={item.img}
                 index={index}

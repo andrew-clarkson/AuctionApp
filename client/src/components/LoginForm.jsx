@@ -1,51 +1,117 @@
-import React from "react";
+import React, { useState } from "react";
 
-const LoginForm = (props) => {
+const loginForm = (props) => {
+  const [data, setData] = useState();
+  const changeHandler = (event) => {
+    let { name, value } = event.target;
+    setData((prevItem) => {
+      return {
+        ...prevItem,
+        [name]: value,
+      };
+    });
+    // console.log(data);
+  };
+
+  const loginHandler = () => {
+    let data = {
+      email: data.username,
+      password: data.password,
+    };
+
+    // fetch("/login", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(data),
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log("Success:", data);
+    //   })
+    //   .catch((error) => {
+    //     console.log("Error:", error);
+    //   });
+  };
+
   return (
-    <div id="main-holder" className="container mt-5 ">
-      <h1>Login</h1>
-      <h4 onClick={props.closeHandler}>Close window</h4>
-      <div className="row">
-        <div className="col">
-          <div className="card border-0">
-            <div className="card-body">
-              <form action="/login" method="POST">
-                <div className="form-group">
-                  {/* <label htmlFor="email">Email</label> */}
-                  <input
-                    type="email"
-                    className="form-control"
-                    name="username"
-                    placeholder="Email"
-                  />
-                </div>
-                <div className="form-group">
-                  {/* <label htmlFor="password">Password</label> */}
-                  <input
-                    type="password"
-                    className="form-control"
-                    name="password"
-                    placeholder="Password"
-                  />
-                </div>
-                <button type="submit" className="btn btn-dark">
-                  Login
-                </button>
-              </form>
-            </div>
+    <div
+      className="modal fade"
+      id="loginModal"
+      tabIndex="-1"
+      aria-labelledby="loginModalLabel"
+      aria-hidden="true"
+    >
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h6 className="modal-title fw-bold" id="loginModalLabel">
+              Welcome to the Auction
+            </h6>
+            {/* <h1>login</h1> */}
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
-        </div>
 
-        <div className="col">
-          <div className="">
-            <div className="">
+          <div className="modal-body">
+            {/* <h3>Sign in or Login to Bid</h3> */}
+            <h6>
+              New Here?
               <a
-                className="btn btn-block btn-google"
+                data-bs-dismiss="modal"
+                data-bs-toggle="modal"
+                data-bs-target="#registerModal"
+                className="close"
+                href="#"
+              >
+                Create an account here.
+              </a>
+            </h6>
+
+            <form onSubmit={loginHandler} method="POST">
+              <div className="form-group mt-4">
+                <label htmlFor="email">Email</label>
+
+                <input
+                  type="email"
+                  className="form-control"
+                  name="username"
+                  placeholder=""
+                  onChange={changeHandler}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+
+                <input
+                  type="password"
+                  className="form-control"
+                  name="password"
+                  placeholder=""
+                  onChange={changeHandler}
+                />
+              </div>
+              <div className="d-grid gap-2 mt-4 mb-4">
+                <button type="submit" className="btn btn-outline-dark ">
+                  Sign In
+                </button>
+              </div>
+            </form>
+
+            <h6 className="line">
+              <span>or</span>
+            </h6>
+            <div className="d-grid gap-2">
+              <a
+                className="btn btn-outline-dark btn-google my-2"
                 href="http://localhost:3001/auth/google"
                 role="button"
               >
-                <i className="fab fa-google"></i>
-                Sign In with Google
+                <i className="fab fa-google me-2"></i>
+                Continue with Google
               </a>
             </div>
           </div>

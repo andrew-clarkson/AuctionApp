@@ -1,17 +1,12 @@
-/* .container {
-  height: 100vh;
-} */
+img {
+  width: 400px; /* width of container */
+  height: 300px; /* height of container */
+  object-fit: cover;
+}
 
 .card {
   width: 400px;
   padding: 10px;
-  border: 1px solid #eee;
-}
-
-.inner-card {
-  background: #fff;
-  padding: 10px;
-  border-radius: 5px;
 }
 
 .heart {
@@ -27,14 +22,7 @@
   background-color: #eee;
 }
 
-/* .btn:focus {
-  color: #fff;
-  background-color: #025ce2;
-  border-color: #0257d5;
-  box-shadow: none;
-} */
-
-/* FROM PYTHON SITE */
+/* FROM ORIGINAL PYTHON SITE */
 
 /* changes background colour on nav and footer */
 .blueback {
@@ -115,4 +103,8 @@ html {
 .line span {
   background: #fff;
   padding: 0 10px;
+}
+
+.navbar-brand {
+  font-family: "Stint Ultra Expanded", cursive;
 }

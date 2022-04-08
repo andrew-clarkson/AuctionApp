@@ -48,7 +48,7 @@ app.use(express.text());
 const uri =
   "mongodb+srv://user1:" +
   pass +
-  "@tallsoup.428jc.mongodb.net/AuctionDB?retryWrites=true&w=majority";
+  "@tallsoup.428jc.mongodb.net/AuctionDB4?retryWrites=true&w=majority";
 
 //connect to Mongo
 mongoose
@@ -64,7 +64,9 @@ const itemSchema = new mongoose.Schema({
   bids: Number,
   price: Number, //will be stored in cents?
   highBidder: String,
+  highBidderId: String,
   seller: String,
+  sellerId: String,
   img: String,
 });
 
@@ -108,7 +110,7 @@ passport.use(
       callbackURL: "http://localhost:3001/auth/google/callback",
     },
     function (accessToken, refreshToken, profile, cb) {
-      console.log(profile);
+      // console.log(profile);
       User.findOrCreate(
         { googleId: profile.id, username: profile.displayName },
         function (err, user) {
@@ -120,35 +122,35 @@ passport.use(
   )
 );
 
-const createItem = () => {
-  //creating unique keys for items
-  const newKey = uuid();
-  const item = new Item({
-    key: newKey,
-    id: newKey,
-    title: "Sample Item",
-    bids: 0,
-    price: 0,
-    highBidder: "Jack",
-    seller: "Andrew",
-    index: 4, //fix
-    img: "https://picsum.photos/400/300",
-  });
-  return item;
-};
+// const createItem = () => {
+//   //creating unique keys for items
+//   const newKey = uuid();
+//   const item = new Item({
+//     key: newKey,
+//     id: newKey,
+//     title: "Sample Item",
+//     bids: 0,
+//     price: 0,
+//     highBidder: "Jack",
+//     seller: "Andrew",
+//     index: 4, //fix
+//     img: "https://picsum.photos/400/300",
+//   });
+//   return item;
+// };
 
-const sendItem = () => {
-  let item = createItem();
-  item.save();
-  console.log(item);
-  // try {
-  //   res.redirect("/");
-  // } catch (error) {
-  //   console.log(error);
-  // }
-};
+// const sendItem = () => {
+//   let item = createItem();
+//   item.save();
+//   console.log(item);
+//   // try {
+//   //   res.redirect("/");
+//   // } catch (error) {
+//   //   console.log(error);
+//   // }
+// };
 
-// sendItem();
+// // sendItem();
 
 // Have Node serve the files for our built React app
 app.use(express.static(path.resolve(__dirname, "../client/build")));
@@ -157,7 +159,7 @@ const loggedIn = (req, res, next) => {
   if (req.user) {
     next();
   } else {
-    console.log("not logged in");
+    // console.log("not logged in");
     // res.redirect('/login');
   }
 };
@@ -182,49 +184,52 @@ app.get(
   }
 );
 
-// app.post("/login", (req, res) => {
-//   let { username, password } = req.body;
-//   const user = new User({
-//     username: username,
-//     password: password,
-//   });
+app.post("/login", (req, res) => {
+  console.log(req.body);
+  let { username, password } = req.body;
 
-//   req.login(user, function (err) {
-//     if (err) {
-//       console.log(err);
-//     } else {
-//       passport.authenticate("local")(req, res, function () {
-//         res.redirect("/secrets");
-//         console.log(req.user);
-//       });
-//     }
-//   });
-// });
+  const user = new User({
+    username: username,
+    password: password,
+  });
 
-// app.post("/register", (req, res) => {
-//   let { username, password } = req.body;
+  req.login(user, function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      passport.authenticate("local")(req, res, function () {
+        res.redirect("http://localhost:3000");
+        console.log(req.user);
+      });
+    }
+  });
+});
 
-//   User.register({ username: username }, password, function (err, user) {
-//     if (err) {
-//       console.log(err);
-//       res.redirect("/register");
-//     } else {
-//       passport.authenticate("local")(req, res, function () {
-//         res.redirect("/secrets");
-//       });
-//     }
-//   });
-// });
+app.post("/register", (req, res) => {
+  console.log(req.body);
+  let { username, password } = req.body;
+
+  User.register({ username: username }, password, function (err, user) {
+    if (err) {
+      console.log(err);
+    } else {
+      passport.authenticate("local")(req, res, function () {
+        res.redirect("http://localhost:3000");
+      });
+    }
+  });
+});
 
 app.get("/logout", function (req, res) {
   userDetails = {};
   req.logOut();
-  res.redirect("http://localhost:3000/");
+  res.redirect("http://localhost:3000");
 });
 
 app.post("/add", (req, res) => {
+  // console.log(req.body);
   const item = new Item(req.body);
-  console.log(item);
+  // console.log("server: ", item);
   item.save();
   //add response here, check others
 });
@@ -232,12 +237,42 @@ app.post("/add", (req, res) => {
 app.post("/delete", loggedIn, (req, res, next) => {
   const itemToDeleteID = req.body;
   console.log(itemToDeleteID);
-  Item.findOneAndDelete({ id: itemToDeleteID }, (err, deletedItem) => {
+  Item.find({ id: itemToDeleteID }, (err, foundItem) => {
     if (!err) {
-      console.log("deleted: ", deletedItem);
-      res.status(200).json({ success: true });
+      console.log(foundItem);
+      // console.log("found it");
+      if (foundItem[0].sellerId === req.user.id) {
+        Item.findOneAndDelete({ id: itemToDeleteID }, (err, deletedItem) => {
+          if (!err) {
+            console.log("deleted: ", deletedItem);
+            res.status(200).json({ success: true });
+          } else {
+            console.log("Error: ", err);
+          }
+        });
+      }
     } else {
       console.log("Error: ", err);
+    }
+  });
+});
+
+app.post("/edit", loggedIn, (req, res, next) => {
+  let { id, title, img } = req.body;
+  console.log(id);
+  Item.find({ id: id }, (err, foundItem) => {
+    if (!err) {
+      console.log(foundItem);
+      let newData = { title: title, img: img };
+      Item.findOneAndUpdate({ id: id }, newData, (err, itemToUpdate) => {
+        if (!err) {
+          console.log("Updated ", itemToUpdate);
+        } else {
+          console.log(err);
+        }
+      });
+    } else {
+      console.log(err);
     }
   });
 });
@@ -248,12 +283,22 @@ app.post("/bid", loggedIn, (req, res, next) => {
   //CHANGE THIS TO CHECK ID NOT NAME
   Item.find({ id: id }, (err, foundItem) => {
     if (!err) {
-      console.log("Found: ", foundItem[0].highBidder);
-      if (foundItem[0].highBidder != req.user.username) {
-        console.log(foundItem.highBidder, req.user.username);
+      // console.log("Found: ", foundItem[0]);
+      // console.log(
+      //   "found id:",
+      //   foundItem[0].highBidderId,
+      //   "userID:",
+      //   req.user.id
+      // );
+      if (foundItem[0].highBidderId != req.user.id) {
         Item.findOneAndUpdate(
           { id: id },
-          { bids: bids, price: price, highBidder: req.user.username },
+          {
+            bids: bids,
+            price: price,
+            highBidder: req.user.username,
+            highBidderId: req.user.id,
+          },
           (err, foundItem) => {
             if (!err) {
               console.log("Updated: ", foundItem.title);
@@ -289,10 +334,10 @@ app.get("/loggedin", loggedIn, (req, res, next) => {
   res.send(req.user);
 });
 
-app.get("/getuser", (req, res) => {
-  // console.log(userDetails);
-  res.send(userDetails);
-});
+// app.get("/getuser", (req, res) => {
+//   // console.log(userDetails);
+//   res.send(userDetails);
+// });
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
