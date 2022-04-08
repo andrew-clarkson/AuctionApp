@@ -96,7 +96,8 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:3001/auth/google/callback",
+      callbackURL:
+        "https://react-auction-app.herokuapp.com/auth/google/callback",
     },
     function (accessToken, refreshToken, profile, cb) {
       User.findOrCreate(
@@ -121,7 +122,7 @@ const loggedIn = (req, res, next) => {
 //ROUTES
 
 app.get("/", function (req, res) {
-  res.redirect("http://localhost:3000");
+  res.redirect("https://react-auction-app.herokuapp.com/");
 });
 
 app.get(
