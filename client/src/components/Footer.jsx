@@ -3,7 +3,7 @@ import React from "react";
 const Footer = () => {
   let year = new Date().getFullYear();
   return (
-    <div>
+    <div className="mt-5">
       <footer className="footer fixed-bottom bg-dark pt-3">
         <div className="container">
           <span className="text-light">

@@ -13,7 +13,7 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const findOrCreate = require("mongoose-findorcreate");
 
-const pass = process.env.DBPASSWORD;
+const uri = process.env.MONGO_URI;
 const PORT = process.env.PORT || 3001;
 let userDetails = {};
 
@@ -34,11 +34,6 @@ app.use(express.json());
 app.use(express.text());
 
 //connect to Mongo
-const uri =
-  "mongodb+srv://user1:" +
-  pass +
-  "@tallsoup.428jc.mongodb.net/AuctionDB4?retryWrites=true&w=majority";
-
 mongoose
   .connect(uri)
   .then(() => console.log("Now connected to MongoDB!"))
@@ -242,7 +237,6 @@ app.post("/login", (req, res) => {
     } else {
       passport.authenticate("local")(req, res, function () {
         res.redirect("http://localhost:3000");
-        console.log(req.user);
       });
     }
   });
@@ -267,6 +261,11 @@ app.post("/register", (req, res) => {
       });
     }
   });
+});
+
+// catchall route
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
 });
 
 app.listen(PORT, () => {
