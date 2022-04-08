@@ -17,6 +17,9 @@ const pass = process.env.DBPASSWORD;
 const PORT = process.env.PORT || 3001;
 let userDetails = {};
 
+// // Have Node serve the files for React app
+// app.use(express.static(path.resolve(__dirname, "../client/build")));
+
 //config session for express
 app.use(
   session({
@@ -93,7 +96,8 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:3001/auth/google/callback",
+      callbackURL:
+        "https://react-auction-app.herokuapp.com/auth/google/callback",
     },
     function (accessToken, refreshToken, profile, cb) {
       User.findOrCreate(
@@ -117,6 +121,10 @@ const loggedIn = (req, res, next) => {
 
 //ROUTES
 
+// app.get("*", (req, res) => {
+//     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+//   });
+
 app.get(
   "/auth/google",
   passport.authenticate("google", { scope: ["profile"] })
@@ -124,9 +132,11 @@ app.get(
 
 app.get(
   "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "http://localhost:3000" }),
+  passport.authenticate("google", {
+    failureRedirect: "https://react-auction-app.herokuapp.com/",
+  }),
   function (req, res) {
-    res.redirect("http://localhost:3000");
+    res.redirect("https://react-auction-app.herokuapp.com/");
   }
 );
 
@@ -238,7 +248,7 @@ app.post("/login", (req, res) => {
       console.log(err);
     } else {
       passport.authenticate("local")(req, res, function () {
-        res.redirect("http://localhost:3000");
+        res.redirect("https://react-auction-app.herokuapp.com/");
         console.log(req.user);
       });
     }
@@ -248,7 +258,7 @@ app.post("/login", (req, res) => {
 app.get("/logout", function (req, res) {
   userDetails = {};
   req.logOut();
-  res.redirect("http://localhost:3000");
+  res.redirect("https://react-auction-app.herokuapp.com/");
 });
 
 app.post("/register", (req, res) => {
@@ -260,7 +270,7 @@ app.post("/register", (req, res) => {
       console.log(err);
     } else {
       passport.authenticate("local")(req, res, function () {
-        res.redirect("http://localhost:3000");
+        res.redirect("https://react-auction-app.herokuapp.com/");
       });
     }
   });
@@ -275,9 +285,6 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
 }
-
-// // Have Node serve the files for React app
-// app.use(express.static(path.resolve(__dirname, "../client/build")));
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

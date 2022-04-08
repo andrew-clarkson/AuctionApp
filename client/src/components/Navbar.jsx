@@ -7,7 +7,7 @@ const Navbar = (props) => {
     <div>
       <nav className="navbar navbar-brand-center sticky-top navbar-expand-lg ">
         <div className="container">
-          <a className="navbar-brand fs-2 text-light" href="#">
+          <a className="navbar-brand fs-2 text-light" href="">
             AUCTIONAPP <i className="fa-solid fa-gavel"></i>
           </a>
           <button
@@ -52,7 +52,7 @@ const Navbar = (props) => {
                 <li className="nav-item">
                   <a
                     className="nav-link text-light"
-                    href="http://localhost:3001/logout"
+                    href="https://react-auction-app.herokuapp.com/logout"
                   >
                     Log Out
                   </a>
