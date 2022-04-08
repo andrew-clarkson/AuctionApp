@@ -89,7 +89,7 @@ passport.use(
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL:
-        "https://react-auction-app.herokuapp.com//auth/google/callback",
+        "https://react-auction-app.herokuapp.com/auth/google/callback",
     },
     function (accessToken, refreshToken, profile, cb) {
       User.findOrCreate(
