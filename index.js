@@ -17,9 +17,6 @@ const pass = process.env.DBPASSWORD;
 const PORT = process.env.PORT || 3001;
 let userDetails = {};
 
-// // Have Node serve the files for React app
-// app.use(express.static(path.resolve(__dirname, "../client/build")));
-
 //config session for express
 app.use(
   session({
@@ -28,6 +25,9 @@ app.use(
     saveUninitialized: true,
   })
 );
+
+// // // Have Node serve the files for React app
+// app.use(express.static(path.resolve(__dirname, "../client/build")));
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -96,8 +96,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL:
-        "https://react-auction-app.herokuapp.com/auth/google/callback",
+      callbackURL: "http://localhost:3001/auth/google/callback",
     },
     function (accessToken, refreshToken, profile, cb) {
       User.findOrCreate(
@@ -121,9 +120,9 @@ const loggedIn = (req, res, next) => {
 
 //ROUTES
 
-// app.get("*", (req, res) => {
-//     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-//   });
+app.get("/", function (req, res) {
+  res.redirect("http://localhost:3000");
+});
 
 app.get(
   "/auth/google",
@@ -132,11 +131,9 @@ app.get(
 
 app.get(
   "/auth/google/callback",
-  passport.authenticate("google", {
-    failureRedirect: "https://react-auction-app.herokuapp.com/",
-  }),
+  passport.authenticate("google", { failureRedirect: "/" }),
   function (req, res) {
-    res.redirect("https://react-auction-app.herokuapp.com/");
+    res.redirect("/");
   }
 );
 
@@ -248,7 +245,7 @@ app.post("/login", (req, res) => {
       console.log(err);
     } else {
       passport.authenticate("local")(req, res, function () {
-        res.redirect("https://react-auction-app.herokuapp.com/");
+        res.redirect("/");
         console.log(req.user);
       });
     }
@@ -258,7 +255,7 @@ app.post("/login", (req, res) => {
 app.get("/logout", function (req, res) {
   userDetails = {};
   req.logOut();
-  res.redirect("https://react-auction-app.herokuapp.com/");
+  res.redirect("/");
 });
 
 app.post("/register", (req, res) => {
@@ -270,21 +267,28 @@ app.post("/register", (req, res) => {
       console.log(err);
     } else {
       passport.authenticate("local")(req, res, function () {
-        res.redirect("https://react-auction-app.herokuapp.com/");
+        res.redirect("/");
       });
     }
   });
 });
 
-//Serve static if in prod - used to call build in heroku
-if (process.env.NODE_ENV === "production") {
-  //set static folder
-  app.use(express.static("client/build"));
+// //Serve static if in prod - used to call build in heroku
+// if (process.env.NODE_ENV === "production") {
+//   //set static folder
+//   app.use(express.static("client/build"));
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-  });
-}
+//   app.get("*", (req, res) => {
+//     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+//   });
+// }
+
+// Step 1:
+app.use(express.static(path.resolve(__dirname, "./client/build")));
+// Step 2:
+app.get("*", function (request, response) {
+  response.sendFile(path.resolve(__dirname, "./client/build", "index.html"));
+});
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
