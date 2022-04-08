@@ -54,7 +54,7 @@ const Navbar = (props) => {
                 <li className="nav-item">
                   <a
                     className="nav-link text-light"
-                    href="http://localhost:3001/logout"
+                    href="https://react-auction-app.herokuapp.com/logout"
                   >
                     Log Out
                   </a>

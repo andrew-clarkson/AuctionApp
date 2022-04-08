@@ -245,7 +245,7 @@ app.post("/login", (req, res) => {
   });
 });
 
-app.get("/logout", function (req, res) {
+app.post("/logout", function (req, res) {
   userDetails = {};
   req.logOut();
   res.redirect("https://react-auction-app.herokuapp.com/");
