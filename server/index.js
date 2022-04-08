@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 const app = express();
 // for passport.js:
 const session = require("express-session");
+const cookieSession = require("cookie-session");
 const passport = require("passport");
 //passport-local installed, do not have to set
 const passportLocalMongoose = require("passport-local-mongoose");
@@ -17,12 +18,20 @@ const uri = process.env.MONGO_URI;
 const PORT = process.env.PORT || 3001;
 // let userDetails = {};
 
-//config session for express
+// //config session for express
+// app.use(
+//   session({
+//     secret: process.env.EXPRESS_SECRET,
+//     resave: false,
+//     saveUninitialized: true,
+//   })
+// );
+
+//use this instead of above
 app.use(
-  session({
+  cookieSession({
+    name: "session",
     secret: process.env.EXPRESS_SECRET,
-    resave: false,
-    saveUninitialized: true,
   })
 );
 
@@ -248,9 +257,7 @@ app.post("/login", (req, res) => {
 app.post("/logout", function (req, res) {
   // userDetails = {};
   req.logOut();
-  req.session.destroy(function (err) {
-    res.redirect("https://react-auction-app.herokuapp.com/");
-  });
+  res.redirect("https://react-auction-app.herokuapp.com/");
 });
 
 app.post("/register", (req, res) => {
