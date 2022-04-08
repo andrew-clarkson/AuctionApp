@@ -15,7 +15,7 @@ const findOrCreate = require("mongoose-findorcreate");
 
 const uri = process.env.MONGO_URI;
 const PORT = process.env.PORT || 3001;
-let userDetails = {};
+// let userDetails = {};
 
 //config session for express
 app.use(
@@ -95,7 +95,7 @@ passport.use(
       User.findOrCreate(
         { googleId: profile.id, username: profile.displayName },
         function (err, user) {
-          userDetails = profile;
+          // userDetails = profile;
           return cb(err, user);
         }
       );
@@ -246,9 +246,11 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/logout", function (req, res) {
-  userDetails = {};
+  // userDetails = {};
   req.logOut();
-  res.redirect("https://react-auction-app.herokuapp.com/");
+  req.session.destroy(function (err) {
+    res.redirect("https://react-auction-app.herokuapp.com/");
+  });
 });
 
 app.post("/register", (req, res) => {
