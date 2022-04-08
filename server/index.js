@@ -88,7 +88,8 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:3001/auth/google/callback",
+      callbackURL:
+        "https://react-auction-app.herokuapp.com//auth/google/callback",
     },
     function (accessToken, refreshToken, profile, cb) {
       User.findOrCreate(
@@ -122,9 +123,11 @@ app.get(
 
 app.get(
   "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "http://localhost:3000" }),
+  passport.authenticate("google", {
+    failureRedirect: "https://react-auction-app.herokuapp.com/",
+  }),
   function (req, res) {
-    res.redirect("http://localhost:3000");
+    res.redirect("https://react-auction-app.herokuapp.com/");
   }
 );
 
@@ -236,7 +239,7 @@ app.post("/login", (req, res) => {
       console.log(err);
     } else {
       passport.authenticate("local")(req, res, function () {
-        res.redirect("http://localhost:3000");
+        res.redirect("https://react-auction-app.herokuapp.com/");
       });
     }
   });
@@ -245,7 +248,7 @@ app.post("/login", (req, res) => {
 app.get("/logout", function (req, res) {
   userDetails = {};
   req.logOut();
-  res.redirect("http://localhost:3000");
+  res.redirect("https://react-auction-app.herokuapp.com/");
 });
 
 app.post("/register", (req, res) => {
@@ -257,7 +260,7 @@ app.post("/register", (req, res) => {
       console.log(err);
     } else {
       passport.authenticate("local")(req, res, function () {
-        res.redirect("http://localhost:3000");
+        res.redirect("https://react-auction-app.herokuapp.com/");
       });
     }
   });
