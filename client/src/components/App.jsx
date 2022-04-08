@@ -116,7 +116,7 @@ const App = () => {
           </h5>
         </div>
 
-        <div className="row">
+        <div className="row ">
           {items
             .map((item, index) => (
               <AuctionItem

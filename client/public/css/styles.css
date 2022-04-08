@@ -1,3 +1,7 @@
+body {
+  background-color: #f3f4ed;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -12,6 +16,7 @@ img {
 .card {
   width: 400px;
   padding: 10px;
+  background-color: #f3f4ed;
 }
 
 /* for future use with watchlist */
@@ -39,6 +44,10 @@ img {
 .line span {
   background: #fff;
   padding: 0 10px;
+}
+
+.navbar {
+  background-color: #191919;
 }
 
 .navbar-brand {

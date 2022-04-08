@@ -5,7 +5,7 @@ const EditButton = (props) => {
   return (
     <div className="my-1">
       <button
-        className="btn btn-sm btn-outline-warning px-3"
+        className="btn btn-sm btn-outline-dark px-3"
         data-bs-toggle="modal"
         data-bs-target="#editModal"
       >
