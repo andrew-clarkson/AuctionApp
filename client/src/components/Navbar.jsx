@@ -52,10 +52,7 @@ const Navbar = (props) => {
 
               {props.user && (
                 <li className="nav-item">
-                  <a
-                    className="nav-link text-light"
-                    href="https://react-auction-app.herokuapp.com/logout"
-                  >
+                  <a className="nav-link text-light" href="/logout">
                     Log Out
                   </a>
                 </li>

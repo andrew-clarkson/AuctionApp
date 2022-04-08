@@ -18,22 +18,22 @@ const uri = process.env.MONGO_URI;
 const PORT = process.env.PORT || 3001;
 // let userDetails = {};
 
-//config session for express
-app.use(
-  session({
-    secret: process.env.EXPRESS_SECRET,
-    resave: false,
-    saveUninitialized: true,
-  })
-);
-
-// //use this instead of above
+// //config session for express
 // app.use(
-//   cookieSession({
-//     name: "session",
+//   session({
 //     secret: process.env.EXPRESS_SECRET,
+//     resave: false,
+//     saveUninitialized: true,
 //   })
 // );
+
+//use this instead of above
+app.use(
+  cookieSession({
+    name: "session",
+    secret: process.env.EXPRESS_SECRET,
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -97,8 +97,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL:
-        "https://react-auction-app.herokuapp.com/auth/google/callback",
+      callbackURL: "/auth/google/callback",
     },
     function (accessToken, refreshToken, profile, cb) {
       User.findOrCreate(
@@ -133,10 +132,10 @@ app.get(
 app.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "https://react-auction-app.herokuapp.com/",
+    failureRedirect: "/",
   }),
   function (req, res) {
-    res.redirect("https://react-auction-app.herokuapp.com/");
+    res.redirect("/");
   }
 );
 
@@ -248,7 +247,7 @@ app.post("/login", (req, res) => {
       console.log(err);
     } else {
       passport.authenticate("local")(req, res, function () {
-        res.redirect("https://react-auction-app.herokuapp.com/");
+        res.redirect("/");
       });
     }
   });
@@ -257,7 +256,7 @@ app.post("/login", (req, res) => {
 app.post("/logout", function (req, res) {
   // userDetails = {};
   req.logOut();
-  res.redirect("https://react-auction-app.herokuapp.com/");
+  res.redirect("/");
 });
 
 app.post("/register", (req, res) => {
@@ -269,7 +268,7 @@ app.post("/register", (req, res) => {
       console.log(err);
     } else {
       passport.authenticate("local")(req, res, function () {
-        res.redirect("https://react-auction-app.herokuapp.com/");
+        res.redirect("/");
       });
     }
   });

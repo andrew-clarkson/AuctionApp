@@ -14,7 +14,7 @@ const RegisterForm = (props) => {
         [name]: value,
       };
     });
-    console.log(registerData);
+    // console.log(registerData);
   };
 
   const loginChangeHandler = (event) => {
@@ -25,7 +25,7 @@ const RegisterForm = (props) => {
         [name]: value,
       };
     });
-    console.log(loginData);
+    // console.log(loginData);
   };
 
   const registerHandler = () => {
@@ -169,7 +169,7 @@ const RegisterForm = (props) => {
             <div className="d-grid gap-2">
               <a
                 className="btn btn-outline-dark btn-google my-2"
-                href="http://localhost:3001/auth/google"
+                href="/auth/google"
                 role="button"
               >
                 <i className="fab fa-google me-2"></i>

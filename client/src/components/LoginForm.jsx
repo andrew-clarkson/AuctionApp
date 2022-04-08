@@ -107,7 +107,7 @@ const loginForm = (props) => {
             <div className="d-grid gap-2">
               <a
                 className="btn btn-outline-dark btn-google my-2"
-                href="https://react-auction-app.herokuapp.com/auth/google"
+                href="/auth/google"
                 role="button"
               >
                 <i className="fab fa-google me-2"></i>
