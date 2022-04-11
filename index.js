@@ -119,6 +119,13 @@ const loggedIn = (req, res, next) => {
   }
 };
 
+// const checkAuthenticated = (req, res, next) => {
+//   if (req.isAuthenticated()) {
+//     return next();
+//   }
+//   res.redirect("/login");
+// };
+
 //ROUTES
 
 app.get("/", function (req, res) {
@@ -258,6 +265,7 @@ app.post("/logout", function (req, res) {
   req.logOut();
   // res.redirect("/");
   req.session.destroy(() => res.redirect("/"));
+  console.log(req.session.passport, req.user);
 });
 
 app.post("/register", (req, res) => {
