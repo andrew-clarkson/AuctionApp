@@ -256,8 +256,8 @@ app.post("/login", (req, res) => {
 app.post("/logout", function (req, res) {
   userDetails = {};
   req.logOut();
-  res.redirect("/");
-  // req.session.destroy(() => res.redirect("/"));
+  // res.redirect("/");
+  req.session.destroy(() => res.redirect("/"));
 });
 
 app.post("/register", (req, res) => {

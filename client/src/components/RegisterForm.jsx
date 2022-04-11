@@ -4,7 +4,7 @@ const RegisterForm = (props) => {
   const [loginData, setLoginData] = useState();
   const [registerData, setRegisterData] = useState();
 
-  const [passcheck, setPasscheck] = useState(false);
+  // const [passcheck, setPasscheck] = useState(false);
 
   const registerChangeHandler = (event) => {
     let { name, value } = event.target;
@@ -14,7 +14,7 @@ const RegisterForm = (props) => {
         [name]: value,
       };
     });
-    console.log(registerData);
+    // console.log(registerData);
   };
 
   const loginChangeHandler = (event) => {
