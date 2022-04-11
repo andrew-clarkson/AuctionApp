@@ -14,3 +14,7 @@ authentication with google
 modals
 
 importance of detailed plan/design
+
+deployment
+
+bug fix chase - logout and absolute URLs
