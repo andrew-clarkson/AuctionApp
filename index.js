@@ -22,7 +22,7 @@ app.use(
   session({
     secret: process.env.EXPRESS_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
   })
 );
 

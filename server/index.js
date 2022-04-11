@@ -22,7 +22,7 @@ app.use(
   session({
     secret: process.env.EXPRESS_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
   })
 );
 
@@ -115,6 +115,10 @@ const loggedIn = (req, res, next) => {
 };
 
 //ROUTES
+
+app.get("/", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+});
 
 app.get(
   "/auth/google",
