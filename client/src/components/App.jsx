@@ -1,5 +1,7 @@
 import React, { useState, useEffect, createContext } from "react";
 import AuctionItem from "./AuctionItem";
+import { v4 as uuid } from "uuid";
+import AddItem from "./AddItem";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import LoginForm from "./RegisterForm";
@@ -14,14 +16,14 @@ const App = () => {
   const [loggedIn, setLoggedIn] = useState();
 
   const getAll = () => {
-    fetch("/api/all")
+    fetch("/all")
       .then((res) => res.json())
       .then((data) => setItems(data));
   };
 
   //candidate for useEffect?
   const isLoggedIn = () => {
-    fetch("/api/loggedin")
+    fetch("/loggedin")
       .then((res) => res.json())
       .then((data) => setLoggedIn(data));
   };
@@ -66,7 +68,7 @@ const App = () => {
       highBidderID: loggedIn.id,
     };
 
-    fetch("/api/bid", {
+    fetch("/bid", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedBid),
@@ -82,7 +84,7 @@ const App = () => {
   };
 
   const deleteItem = (id) => {
-    fetch("/api/delete", {
+    fetch("/delete", {
       method: "POST",
       headers: { "Content-Type": "text/plain" },
       body: id,
