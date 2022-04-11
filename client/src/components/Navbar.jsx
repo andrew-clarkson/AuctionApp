@@ -20,7 +20,7 @@ const Navbar = (props) => {
             aria-label="Toggle navigation"
           >
             <span className="">
-              <i class="text-light fa-solid fa-circle-chevron-down fa-lg"></i>
+              <i className="text-light fa-solid fa-circle-chevron-down fa-lg"></i>
             </span>
           </button>
 
