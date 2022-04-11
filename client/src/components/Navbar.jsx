@@ -4,7 +4,14 @@ import RegisterForm from "./RegisterForm";
 
 const Navbar = (props) => {
   let logout = () => {
-    fetch("/logout");
+    fetch("/logout")
+      .then((response) => response)
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.log("Error:", error);
+      });
   };
 
   return (

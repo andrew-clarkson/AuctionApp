@@ -266,6 +266,7 @@ app.post("/logout", function (req, res) {
   req.logOut();
   // res.redirect("/");
   req.session.destroy(() => res.redirect("/"));
+  res.send("Logged Out");
   console.log(req.session.passport, req.user);
 });
 
