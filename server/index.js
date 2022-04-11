@@ -243,7 +243,7 @@ app.post("/login", (req, res) => {
       console.log(err);
     } else {
       passport.authenticate("local")(req, res, function () {
-        res.redirect("https://react-auction-app.herokuapp.com/");
+        res.redirect("/");
       });
     }
   });
@@ -264,7 +264,7 @@ app.post("/register", (req, res) => {
       console.log(err);
     } else {
       passport.authenticate("local")(req, res, function () {
-        res.redirect("https://react-auction-app.herokuapp.com/");
+        res.redirect("/");
       });
     }
   });
