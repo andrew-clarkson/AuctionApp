@@ -17,6 +17,13 @@ const uri = process.env.MONGO_URI;
 const PORT = process.env.PORT || 3001;
 let userDetails = {};
 
+let URL = "https://react-auction-app.herokuapp.com";
+
+if (process.env.NODE_ENV !== "production") {
+  console.log("not prod");
+  URL = "http://localhost:3001";
+}
+
 //config session for express
 app.use(
   session({
@@ -88,7 +95,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:3001/auth/google/callback",
+      callbackURL: URL + "/auth/google/callback",
     },
     function (accessToken, refreshToken, profile, cb) {
       User.findOrCreate(
@@ -127,7 +134,7 @@ app.get(
 app.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "http://localhost:3000/",
+    failureRedirect: "/",
   }),
   function (req, res) {
     res.redirect("/");
