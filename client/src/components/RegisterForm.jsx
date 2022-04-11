@@ -37,7 +37,7 @@ const RegisterForm = (props) => {
         password: registerData.password,
       };
 
-      fetch("/register", {
+      fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newUser),
@@ -53,7 +53,7 @@ const RegisterForm = (props) => {
   };
 
   const loginHandler = () => {
-    fetch("/login", {
+    fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(loginData),
@@ -169,7 +169,7 @@ const RegisterForm = (props) => {
             <div className="d-grid gap-2">
               <a
                 className="btn btn-outline-dark btn-google my-2"
-                href="https://react-auction-app.herokuapp.com/auth/google"
+                href="/auth/google"
                 role="button"
               >
                 <i className="fab fa-google me-2"></i>

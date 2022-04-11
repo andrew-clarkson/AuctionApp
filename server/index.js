@@ -17,6 +17,13 @@ const uri = process.env.MONGO_URI;
 const PORT = process.env.PORT || 3001;
 let userDetails = {};
 
+let URL = "https://react-auction-app.herokuapp.com";
+
+if (process.env.NODE_ENV !== "production") {
+  console.log("not prod");
+  URL = "http://localhost:3001";
+}
+
 //config session for express
 app.use(
   session({
@@ -88,8 +95,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL:
-        "https://react-auction-app.herokuapp.com/auth/google/callback",
+      callbackURL: URL + "/api/auth/google/callback",
     },
     function (accessToken, refreshToken, profile, cb) {
       User.findOrCreate(
@@ -121,27 +127,27 @@ app.get("/", (req, res) => {
 });
 
 app.get(
-  "/auth/google",
+  "/api/auth/google",
   passport.authenticate("google", { scope: ["profile"] })
 );
 
 app.get(
-  "/auth/google/callback",
+  "/api/auth/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "https://react-auction-app.herokuapp.com/",
+    failureRedirect: URL,
   }),
   function (req, res) {
     res.redirect("/");
   }
 );
 
-app.post("/add", (req, res) => {
+app.post("/api/add", (req, res) => {
   const item = new Item(req.body);
   item.save();
   //add response here, check others ******************************************************************
 });
 
-app.get("/all", (req, res) => {
+app.get("/api/all", (req, res) => {
   Item.find({}, (err, foundItems) => {
     if (!err) {
       res.send(foundItems);
@@ -151,7 +157,7 @@ app.get("/all", (req, res) => {
   });
 });
 
-app.post("/bid", loggedIn, (req, res, next) => {
+app.post("/api/bid", loggedIn, (req, res, next) => {
   let { id, bids, price } = req.body;
   Item.find({ id: id }, (err, foundItem) => {
     if (!err) {
@@ -183,7 +189,7 @@ app.post("/bid", loggedIn, (req, res, next) => {
   });
 });
 
-app.post("/delete", loggedIn, (req, res, next) => {
+app.post("/api/delete", loggedIn, (req, res, next) => {
   const itemToDeleteID = req.body;
   console.log(itemToDeleteID);
   Item.find({ id: itemToDeleteID }, (err, foundItem) => {
@@ -205,7 +211,7 @@ app.post("/delete", loggedIn, (req, res, next) => {
   });
 });
 
-app.post("/edit", loggedIn, (req, res, next) => {
+app.post("/api/edit", loggedIn, (req, res, next) => {
   let { id, title, img } = req.body;
   console.log(id);
   Item.find({ id: id }, (err, foundItem) => {
@@ -225,11 +231,11 @@ app.post("/edit", loggedIn, (req, res, next) => {
   });
 });
 
-app.get("/loggedin", loggedIn, (req, res, next) => {
+app.get("/api/loggedin", loggedIn, (req, res, next) => {
   res.send(req.user);
 });
 
-app.post("/login", (req, res) => {
+app.post("/api/login", (req, res) => {
   console.log(req.body);
   let { username, password } = req.body;
 
@@ -249,13 +255,19 @@ app.post("/login", (req, res) => {
   });
 });
 
-app.post("/logout", function (req, res) {
-  userDetails = {};
+app.get("/api/logout", function (req, res) {
   req.logOut();
-  res.redirect("/");
+  req.session.destroy(function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      // userDetails = {};
+      res.redirect("/");
+    }
+  });
 });
 
-app.post("/register", (req, res) => {
+app.post("/api/register", (req, res) => {
   console.log(req.body);
   let { username, password } = req.body;
 
@@ -271,7 +283,7 @@ app.post("/register", (req, res) => {
 });
 
 // catchall route
-app.get("*", (req, res) => {
+app.get("/api*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
 });
 
