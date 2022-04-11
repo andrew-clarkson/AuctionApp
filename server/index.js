@@ -255,10 +255,16 @@ app.post("/login", (req, res) => {
   });
 });
 
-app.post("/logout", function (req, res) {
-  userDetails = {};
+app.get("/logout", function (req, res) {
   req.logOut();
-  res.redirect("/");
+  req.session.destroy(function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      // userDetails = {};
+      res.redirect("/");
+    }
+  });
 });
 
 app.post("/register", (req, res) => {
