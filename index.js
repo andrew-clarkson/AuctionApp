@@ -261,6 +261,7 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/logout", function (req, res) {
+  console.log("logging out");
   userDetails = {};
   req.logOut();
   // res.redirect("/");

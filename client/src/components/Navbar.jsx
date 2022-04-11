@@ -3,6 +3,10 @@ import AddItem from "./AddItem";
 import RegisterForm from "./RegisterForm";
 
 const Navbar = (props) => {
+  let logout = () => {
+    fetch("/logout");
+  };
+
   return (
     <div>
       <nav className="navbar navbar-brand-center sticky-top navbar-expand-lg navbar-dark ">
@@ -54,7 +58,8 @@ const Navbar = (props) => {
                 <li className="nav-item">
                   <a
                     className="nav-link text-light"
-                    href="https://react-auction-app.herokuapp.com/logout"
+                    onClick={logout}
+                    // href="https://react-auction-app.herokuapp.com/logout"
                   >
                     Log Out
                   </a>
