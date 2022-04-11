@@ -8,6 +8,10 @@ import LoginForm from "./RegisterForm";
 // const UserContext = createContext();
 
 const App = () => {
+  //
+  const closeDate = new Date(2022, 3, 14, 14, 20, 0);
+  //
+
   const [items, setItems] = useState([]);
   const [loggedIn, setLoggedIn] = useState();
 
@@ -94,10 +98,6 @@ const App = () => {
       });
     getAll();
   };
-
-  //
-  const closeDate = new Date(2022, 3, 9, 14, 20, 0);
-  //
 
   return (
     <div>
