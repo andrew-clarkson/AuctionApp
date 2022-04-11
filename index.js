@@ -22,7 +22,7 @@ app.use(
   session({
     secret: process.env.EXPRESS_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
   })
 );
 
@@ -253,10 +253,11 @@ app.post("/login", (req, res) => {
   });
 });
 
-app.get("/logout", function (req, res) {
+app.post("/logout", function (req, res) {
   userDetails = {};
   req.logOut();
   res.redirect("/");
+  // req.session.destroy(() => res.redirect("/"));
 });
 
 app.post("/register", (req, res) => {
