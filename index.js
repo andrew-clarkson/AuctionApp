@@ -13,7 +13,7 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const findOrCreate = require("mongoose-findorcreate");
 
-const pass = process.env.DBPASSWORD;
+const uri = process.env.MONGO_URI;
 const PORT = process.env.PORT || 3001;
 let userDetails = {};
 
@@ -22,12 +22,9 @@ app.use(
   session({
     secret: process.env.EXPRESS_SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
   })
 );
-
-// // // Have Node serve the files for React app
-// app.use(express.static(path.resolve(__dirname, "../client/build")));
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -37,11 +34,6 @@ app.use(express.json());
 app.use(express.text());
 
 //connect to Mongo
-const uri =
-  "mongodb+srv://user1:" +
-  pass +
-  "@tallsoup.428jc.mongodb.net/AuctionDB4?retryWrites=true&w=majority";
-
 mongoose
   .connect(uri)
   .then(() => console.log("Now connected to MongoDB!"))
@@ -111,6 +103,9 @@ passport.use(
   )
 );
 
+// Have Node serve the files for React app
+app.use(express.static(path.resolve(__dirname, "../client/build")));
+
 // check if logged in
 const loggedIn = (req, res, next) => {
   if (req.user) {
@@ -121,8 +116,8 @@ const loggedIn = (req, res, next) => {
 
 //ROUTES
 
-app.get("/", function (req, res) {
-  res.redirect("https://react-auction-app.herokuapp.com/");
+app.get("/", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
 });
 
 app.get(
@@ -132,7 +127,9 @@ app.get(
 
 app.get(
   "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/" }),
+  passport.authenticate("google", {
+    failureRedirect: "https://react-auction-app.herokuapp.com/",
+  }),
   function (req, res) {
     res.redirect("/");
   }
@@ -247,22 +244,15 @@ app.post("/login", (req, res) => {
     } else {
       passport.authenticate("local")(req, res, function () {
         res.redirect("/");
-        console.log(req.user);
       });
     }
   });
 });
 
-app.get("/logout", function (req, res) {
+app.post("/logout", function (req, res) {
+  userDetails = {};
   req.logOut();
-  req.session.destroy(function (err) {
-    if (err) {
-      console.log(err);
-    } else {
-      // userDetails = {};
-      res.redirect("/");
-    }
-  });
+  res.redirect("/");
 });
 
 app.post("/register", (req, res) => {
@@ -280,21 +270,9 @@ app.post("/register", (req, res) => {
   });
 });
 
-// //Serve static if in prod - used to call build in heroku
-// if (process.env.NODE_ENV === "production") {
-//   //set static folder
-//   app.use(express.static("client/build"));
-
-//   app.get("*", (req, res) => {
-//     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-//   });
-// }
-
-// Step 1:
-app.use(express.static(path.resolve(__dirname, "./client/build")));
-// Step 2:
-app.get("*", function (request, response) {
-  response.sendFile(path.resolve(__dirname, "./client/build", "index.html"));
+// catchall route
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
 });
 
 app.listen(PORT, () => {
