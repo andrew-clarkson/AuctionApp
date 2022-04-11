@@ -131,7 +131,7 @@ app.get(
     failureRedirect: "https://react-auction-app.herokuapp.com/",
   }),
   function (req, res) {
-    res.redirect("https://react-auction-app.herokuapp.com/");
+    res.redirect("/");
   }
 );
 
@@ -252,7 +252,7 @@ app.post("/login", (req, res) => {
 app.post("/logout", function (req, res) {
   userDetails = {};
   req.logOut();
-  res.redirect("https://react-auction-app.herokuapp.com/");
+  res.redirect("/");
 });
 
 app.post("/register", (req, res) => {
