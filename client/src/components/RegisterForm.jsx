@@ -4,7 +4,7 @@ const RegisterForm = (props) => {
   const [loginData, setLoginData] = useState();
   const [registerData, setRegisterData] = useState();
 
-  // const [passcheck, setPasscheck] = useState(false);
+  const [passcheck, setPasscheck] = useState(false);
 
   const registerChangeHandler = (event) => {
     let { name, value } = event.target;
@@ -14,7 +14,7 @@ const RegisterForm = (props) => {
         [name]: value,
       };
     });
-    // console.log(registerData);
+    console.log(registerData);
   };
 
   const loginChangeHandler = (event) => {
@@ -169,7 +169,7 @@ const RegisterForm = (props) => {
             <div className="d-grid gap-2">
               <a
                 className="btn btn-outline-dark btn-google my-2"
-                href="https://react-auction-app.herokuapp.com/auth/google"
+                href="http://localhost:3001/auth/google"
                 role="button"
               >
                 <i className="fab fa-google me-2"></i>

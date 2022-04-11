@@ -22,7 +22,7 @@ app.use(
   session({
     secret: process.env.EXPRESS_SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
   })
 );
 
@@ -118,13 +118,6 @@ const loggedIn = (req, res, next) => {
   } else {
   }
 };
-
-// const checkAuthenticated = (req, res, next) => {
-//   if (req.isAuthenticated()) {
-//     return next();
-//   }
-//   res.redirect("/login");
-// };
 
 //ROUTES
 
@@ -260,13 +253,10 @@ app.post("/login", (req, res) => {
   });
 });
 
-app.post("/logout", function (req, res) {
-  console.log("logging out");
+app.get("/logout", function (req, res) {
   userDetails = {};
   req.logOut();
-  // res.redirect("/");
-  req.session.destroy(() => res.redirect("/"));
-  console.log(req.session.passport, req.user);
+  res.redirect("/");
 });
 
 app.post("/register", (req, res) => {
