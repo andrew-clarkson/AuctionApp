@@ -4,7 +4,7 @@
 
 The Auction App is a full stack project I built with the MERN Stack to show off the skills I have learned while completing [_The Complete 2022 Web Development Bootcamp_ at **The App Brewery**](https://www.udemy.com/course/the-complete-web-development-bootcamp/?referralCode=F2958B9D9447BDFC8244).
 
-## Technologies Used:
+## Technologies Used
 
 - JavaScript ES6+
 - JSX
