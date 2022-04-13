@@ -1,5 +1,7 @@
 # Auction App - MERN Stack
 
+[DEMO LINK - hosted on Heroku Free Dyno, may take up to 30 seconds to spin up](https://react-auction-app.herokuapp.com/)
+
 ## Description
 
 The Auction App is a full stack project I built with the MERN Stack to show off the skills I have learned while completing [_The Complete 2022 Web Development Bootcamp_ at **The App Brewery**](https://www.udemy.com/course/the-complete-web-development-bootcamp/).
