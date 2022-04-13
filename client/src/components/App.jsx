@@ -9,7 +9,7 @@ import LoginForm from "./RegisterForm";
 
 const App = () => {
   //
-  const closeDate = new Date(2022, 3, 21, 14, 00, 0);
+  const closeDate = new Date(2022, 3, 21, 14, 0, 0);
   //
 
   const [items, setItems] = useState([]);
