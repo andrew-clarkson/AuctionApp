@@ -12,8 +12,8 @@ const App = () => {
   const [loggedIn, setLoggedIn] = useState();
   console.log(loggedIn);
 
-  const getAll = () => {
-    fetch("/all")
+  const getAll = async () => {
+    await fetch("/all")
       .then((res) => res.json())
       .then((data) => setItems(data));
   };
@@ -28,6 +28,7 @@ const App = () => {
   useEffect(() => {
     getAll();
     isLoggedIn();
+    //add error catch
   }, []);
 
   const sendBid = (itemID) => {
