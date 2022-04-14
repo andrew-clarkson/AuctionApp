@@ -48,7 +48,9 @@ const Navbar = (props) => {
 
               {props.user && (
                 <li className="nav-item">
-                  <a className="btn nav-link text-light">Log Out</a>
+                  <a className="btn nav-link text-light" href="/logout">
+                    Log Out
+                  </a>
                 </li>
               )}
               {props.user && (
