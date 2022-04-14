@@ -27,6 +27,12 @@ const App = () => {
 
   useEffect(() => {
     getAll();
+    console.log("getall effect");
+    //add error
+  }, []);
+
+  useEffect(() => {
+    console.log("isloggedin effect");
     isLoggedIn();
     //add error
   }, []);
