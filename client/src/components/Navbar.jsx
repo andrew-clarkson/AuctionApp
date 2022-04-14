@@ -53,16 +53,16 @@ const Navbar = (props) => {
 
               {props.user && (
                 <li className="nav-item">
-                  <button className="btn nav-link text-light" href="/logout">
+                  <a className="btn nav-link text-light" href="/logout">
                     Log Out
-                  </button>
+                  </a>
                 </li>
               )}
               {props.user && (
                 <li className="nav-item">
-                  <button className="btn nav-link text-light fw-bold">
+                  <p className="btn nav-link text-light fw-bold">
                     Welcome {props.user.username}
-                  </button>
+                  </p>
                 </li>
               )}
             </ul>
