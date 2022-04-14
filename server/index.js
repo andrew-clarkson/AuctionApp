@@ -6,6 +6,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 // for passport.js:
+// changing this to cookie-session removes prof error but kills local strat log in
+//also need to remove destroy in logout route
 const session = require("express-session");
 const passport = require("passport");
 //passport-local installed, do not have to set

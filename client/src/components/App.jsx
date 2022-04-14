@@ -26,7 +26,12 @@ const App = () => {
   };
 
   useEffect(() => {
+    console.log("all effect");
     getAll();
+  }, [items]);
+
+  useEffect(() => {
+    console.log("loggedin effect");
     isLoggedIn();
   }, []);
 
