@@ -134,11 +134,10 @@ app.get(
 app.get(
   "/auth/google/callback",
   passport.authenticate("google", {
+    successRedirect: "/",
     failureRedirect: "/",
-  }),
-  function (req, res) {
-    res.redirect("/");
-  }
+    failureFlash: true,
+  })
 );
 
 app.post("/add", (req, res) => {
