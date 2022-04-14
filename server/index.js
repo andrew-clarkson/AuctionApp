@@ -232,6 +232,7 @@ app.post("/edit", loggedIn, (req, res, next) => {
 
 app.get("/loggedin", loggedIn, (req, res, next) => {
   res.send(req.user);
+  //needs a response if not logged in
 });
 
 app.post("/login", (req, res) => {

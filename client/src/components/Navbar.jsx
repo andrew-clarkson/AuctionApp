@@ -45,7 +45,7 @@ const Navbar = (props) => {
                   data-bs-toggle="modal"
                   data-bs-target="#registerModal"
                 >
-                  <button className="btn nav-link btn text-light">
+                  <button className="btn nav-link text-light">
                     Register/Sign In
                   </button>
                 </li>
@@ -53,16 +53,16 @@ const Navbar = (props) => {
 
               {props.user && (
                 <li className="nav-item">
-                  <a className="btn nav-link text-light" href="/logout">
+                  <button className="btn nav-link text-light" href="/logout">
                     Log Out
-                  </a>
+                  </button>
                 </li>
               )}
               {props.user && (
                 <li className="nav-item">
-                  <p className="btn nav-link text-light fw-bold">
+                  <button className="btn nav-link text-light fw-bold">
                     Welcome {props.user.username}
-                  </p>
+                  </button>
                 </li>
               )}
             </ul>
