@@ -263,14 +263,15 @@ app.post("/login", (req, res) => {
 
 app.get("/logout", function (req, res) {
   req.logOut();
-  req.session.destroy(function (err) {
-    if (err) {
-      console.log(err);
-    } else {
-      // userDetails = {};
-      res.redirect("/");
-    }
-  });
+  req.session = null;
+  // req.session.destroy(function (err) {
+  //   if (err) {
+  //     console.log(err);
+  //   } else {
+  //     // userDetails = {};
+  res.redirect("/");
+  //   }
+  // });
 });
 
 app.post("/register", (req, res) => {
