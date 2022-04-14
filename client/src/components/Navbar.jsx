@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import AddItem from "./AddItem";
 import RegisterForm from "./RegisterForm";
 
@@ -7,7 +7,10 @@ const Navbar = (props) => {
     <div>
       <nav className="navbar navbar-brand-center sticky-top navbar-expand-lg navbar-dark ">
         <div className="container">
-          <a className="navbar-brand fs-2 text-light" href="#">
+          <a
+            className="navbar-brand fs-2 text-light"
+            href="https://react-auction-app.herokuapp.com/"
+          >
             AUCTIONAPP <i className="fa-solid fa-gavel"></i>
           </a>
           <button
@@ -32,9 +35,7 @@ const Navbar = (props) => {
                   data-bs-toggle="modal"
                   data-bs-target="#addModal"
                 >
-                  <a className="nav-link text-light" href="#">
-                    Add Item
-                  </a>
+                  <p className="nav-link text-light">Add Item</p>
                 </li>
               )}
 
@@ -44,24 +45,24 @@ const Navbar = (props) => {
                   data-bs-toggle="modal"
                   data-bs-target="#registerModal"
                 >
-                  <a className="nav-link text-light" href="#">
+                  <button className="nav-link btn text-light">
                     Register/Sign In
-                  </a>
+                  </button>
                 </li>
               )}
 
               {props.user && (
                 <li className="nav-item">
-                  <a className="nav-link text-light" href="/logout">
+                  <button className="btn nav-link text-light" href="/logout">
                     Log Out
-                  </a>
+                  </button>
                 </li>
               )}
               {props.user && (
                 <li className="nav-item">
-                  <a className="nav-link text-light fw-bold">
+                  <button className="btn nav-link text-light fw-bold">
                     Welcome {props.user.username}
-                  </a>
+                  </button>
                 </li>
               )}
             </ul>

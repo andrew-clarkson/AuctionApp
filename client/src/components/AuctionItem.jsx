@@ -7,7 +7,6 @@ import Button from "./Button";
 import HighBidder from "./HighBidder";
 import Seller from "./Seller";
 import Title from "./Title";
-import EditItem from "./EditItem";
 import EditButton from "./EditButton";
 
 const Item = (props) => {
