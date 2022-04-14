@@ -235,17 +235,13 @@ app.post("/edit", loggedIn, (req, res, next) => {
 });
 
 app.get("/loggedin", loggedIn, (req, res, next) => {
-  console.log(req.user);
-  if (req.user) {
+  if (req.isAuthenticated()) {
     res.send(req.user);
-  } else {
-    res.send({ username: "" });
   }
-  //needs a response if not logged in
+  //needs a response if not logged in?
 });
 
 app.post("/login", (req, res) => {
-  console.log(req.body);
   let { username, password } = req.body;
 
   const user = new User({
