@@ -12,6 +12,7 @@ const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const findOrCreate = require("mongoose-findorcreate");
+const { redirect } = require("express/lib/response");
 
 const uri = process.env.MONGO_URI;
 const PORT = process.env.PORT || 3001;
@@ -137,7 +138,10 @@ app.get(
     successRedirect: "/",
     failureRedirect: "/",
     failureFlash: true,
-  })
+  }),
+  function (req, res) {
+    res.redirect("/");
+  }
 );
 
 app.post("/add", (req, res) => {
