@@ -51,10 +51,12 @@ const Navbar = (props) => {
                 </li>
               )}
 
-              {props.user && (
+              {1 === 1 && (
                 <li className="nav-item">
-                  <button className="btn nav-link text-light" href="/logout">
-                    Log Out
+                  <button className="btn nav-link">
+                    <a className="nav-link text-light" href="/logout">
+                      Log Out
+                    </a>
                   </button>
                 </li>
               )}
