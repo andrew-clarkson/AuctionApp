@@ -7,10 +7,7 @@ const Navbar = (props) => {
     <div>
       <nav className="navbar navbar-brand-center sticky-top navbar-expand-lg navbar-dark ">
         <div className="container">
-          <a
-            className="navbar-brand fs-2 text-light"
-            href="https://react-auction-app.herokuapp.com/"
-          >
+          <a className="navbar-brand fs-2 text-light" href="/">
             AUCTIONAPP <i className="fa-solid fa-gavel"></i>
           </a>
           <button
@@ -35,7 +32,7 @@ const Navbar = (props) => {
                   data-bs-toggle="modal"
                   data-bs-target="#addModal"
                 >
-                  <button className="btn nav-link text-light">Add Item</button>
+                  <a className="btn nav-link text-light">Add Item</a>
                 </li>
               )}
 
@@ -45,26 +42,20 @@ const Navbar = (props) => {
                   data-bs-toggle="modal"
                   data-bs-target="#registerModal"
                 >
-                  <button className="btn nav-link text-light">
-                    Register/Sign In
-                  </button>
+                  <a className="btn nav-link text-light">Register/Sign In</a>
                 </li>
               )}
 
               {props.user && (
                 <li className="nav-item">
-                  <button className="btn nav-link">
-                    <a className="nav-link text-light" href="/logout">
-                      Log Out
-                    </a>
-                  </button>
+                  <a className="btn nav-link text-light">Log Out</a>
                 </li>
               )}
               {props.user && (
                 <li className="nav-item">
-                  <button className="btn nav-link text-light fw-bold">
+                  <a className="btn nav-link text-light fw-bold">
                     Welcome {props.user.username}
-                  </button>
+                  </a>
                 </li>
               )}
             </ul>
