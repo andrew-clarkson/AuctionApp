@@ -116,6 +116,7 @@ app.use(express.static(path.resolve(__dirname, "../client/build")));
 // check if logged in
 const loggedIn = (req, res, next) => {
   if (req.user) {
+    //can also be req.isAuthenticated()
     next();
   } else {
   }
@@ -129,7 +130,7 @@ app.get("/", (req, res) => {
 
 app.get(
   "/auth/google",
-  passport.authenticate("google", { scope: ["profile"] })
+  passport.authenticate("google", { scope: ["profile"] }) //add email
 );
 
 app.get(
@@ -138,10 +139,7 @@ app.get(
     successRedirect: "/",
     failureRedirect: "/",
     failureFlash: true,
-  }),
-  function (req, res) {
-    res.redirect("/");
-  }
+  })
 );
 
 app.post("/add", (req, res) => {
@@ -235,7 +233,11 @@ app.post("/edit", loggedIn, (req, res, next) => {
 });
 
 app.get("/loggedin", loggedIn, (req, res, next) => {
-  res.send(req.user);
+  console.log(req.user);
+  if (req.user) {
+    res.send(req.user);
+  } else {
+  }
   //needs a response if not logged in
 });
 

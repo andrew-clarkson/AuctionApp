@@ -10,6 +10,7 @@ const App = () => {
 
   const [items, setItems] = useState([]);
   const [loggedIn, setLoggedIn] = useState();
+  console.log(loggedIn);
 
   const getAll = () => {
     fetch("/all")
