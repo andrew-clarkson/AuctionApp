@@ -29,13 +29,13 @@ const App = () => {
     getAll();
     console.log("getall effect");
     //add error
-  }, []);
+  }, [items]);
 
   useEffect(() => {
     console.log("isloggedin effect");
     isLoggedIn();
     //add error
-  }, []);
+  }, [loggedIn]);
 
   const sendBid = (itemID) => {
     let newBid = items.filter((items) => items.id === itemID);
