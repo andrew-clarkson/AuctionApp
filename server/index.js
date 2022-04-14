@@ -232,7 +232,6 @@ app.post("/edit", loggedIn, (req, res, next) => {
 });
 
 app.get("/loggedin", loggedIn, (req, res, next) => {
-  console.log(req.user);
   if (req.user) {
     res.send(req.user);
   } else {
