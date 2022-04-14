@@ -6,12 +6,13 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 // for passport.js:
-const session = require("cookie-session");
+const session = require("express-session");
 const passport = require("passport");
 //passport-local installed, do not have to set
 const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const findOrCreate = require("mongoose-findorcreate");
+const { redirect } = require("express/lib/response");
 
 const uri = process.env.MONGO_URI;
 const PORT = process.env.PORT || 3001;
@@ -232,9 +233,13 @@ app.post("/edit", loggedIn, (req, res, next) => {
 });
 
 app.get("/loggedin", loggedIn, (req, res, next) => {
+  console.log(req.user);
   if (req.user) {
     res.send(req.user);
+  } else {
+    res.send({ username: "" });
   }
+  //needs a response if not logged in
 });
 
 app.post("/login", (req, res) => {
@@ -259,15 +264,14 @@ app.post("/login", (req, res) => {
 
 app.get("/logout", function (req, res) {
   req.logOut();
-  req.session = null;
-  // req.session.destroy(function (err) {
-  //   if (err) {
-  //     console.log(err);
-  //   } else {
-  //     // userDetails = {};
-  res.redirect("/");
-  //   }
-  // });
+  req.session.destroy(function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      // userDetails = {};
+      res.redirect("/");
+    }
+  });
 });
 
 app.post("/register", (req, res) => {
