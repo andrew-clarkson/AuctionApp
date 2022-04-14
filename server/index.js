@@ -237,6 +237,7 @@ app.get("/loggedin", loggedIn, (req, res, next) => {
   if (req.user) {
     res.send(req.user);
   } else {
+    res.send({ username: "" });
   }
   //needs a response if not logged in
 });
