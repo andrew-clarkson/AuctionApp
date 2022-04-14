@@ -28,12 +28,12 @@ const App = () => {
   useEffect(() => {
     console.log("all effect");
     getAll();
-  }, [items]);
+  }, []);
 
   useEffect(() => {
     console.log("loggedin effect");
     isLoggedIn();
-  }, []);
+  });
 
   const sendBid = (itemID) => {
     let newBid = items.filter((items) => items.id === itemID);
