@@ -6,13 +6,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 // for passport.js:
-const session = require("express-session");
+const session = require("cookie-session");
 const passport = require("passport");
 //passport-local installed, do not have to set
 const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const findOrCreate = require("mongoose-findorcreate");
-const { redirect } = require("express/lib/response");
 
 const uri = process.env.MONGO_URI;
 const PORT = process.env.PORT || 3001;
