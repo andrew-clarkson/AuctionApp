@@ -35,7 +35,7 @@ const Navbar = (props) => {
                   data-bs-toggle="modal"
                   data-bs-target="#addModal"
                 >
-                  <p className="nav-link text-light">Add Item</p>
+                  <button className="btn nav-link text-light">Add Item</button>
                 </li>
               )}
 
@@ -45,7 +45,7 @@ const Navbar = (props) => {
                   data-bs-toggle="modal"
                   data-bs-target="#registerModal"
                 >
-                  <button className="nav-link btn text-light">
+                  <button className="btn nav-link btn text-light">
                     Register/Sign In
                   </button>
                 </li>
