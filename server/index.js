@@ -116,7 +116,7 @@ passport.use(
 app.use(express.static(path.resolve(__dirname, "../client/build")));
 
 // check if logged in
-const loggedIn = (req, res, next) => {
+loggedIn = (req, res, next) => {
   if (req.user) {
     //can also be req.isAuthenticated()
     next();
@@ -237,6 +237,8 @@ app.post("/edit", loggedIn, (req, res, next) => {
 app.get("/loggedin", loggedIn, (req, res, next) => {
   if (req.isAuthenticated()) {
     res.send(req.user);
+  } else {
+    console.log("Not logged in");
   }
   //needs a response if not logged in?
 });
