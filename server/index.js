@@ -234,7 +234,7 @@ app.post("/edit", loggedIn, (req, res, next) => {
   });
 });
 
-app.get("/loggedin", loggedIn, (req, res, next) => {
+app.get("/loggedin", (req, res) => {
   if (req.isAuthenticated()) {
     res.send(req.user);
   } else {
