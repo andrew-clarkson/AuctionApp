@@ -238,7 +238,7 @@ app.get("/loggedin", (req, res) => {
   if (req.isAuthenticated()) {
     res.send(req.user);
   } else {
-    res.status(401).send("Not logged in");
+    res.status(401).end();
   }
   //needs a response if not logged in?
 });
