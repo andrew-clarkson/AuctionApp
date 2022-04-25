@@ -30,25 +30,31 @@ const RegisterForm = (props) => {
 
   const registerHandler = () => {
     if (registerData.password === registerData.passwordcheck) {
-      console.log("Go!");
+      console.log("passwords match");
+      if (validateEmail) {
+        console.log("email valid");
+        let newUser = {
+          username: registerData.username,
+          password: registerData.password,
+        };
 
-      let newUser = {
-        username: registerData.username,
-        password: registerData.password,
-      };
-
-      fetch("/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newUser),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
+        fetch("/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newUser),
         })
-        .catch((error) => {
-          console.log("Error:", error);
-        });
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Success:", data);
+          })
+          .catch((error) => {
+            console.log("Error:", error);
+          });
+      } else {
+        alert("That is not a valid email, try again.");
+      }
+    } else {
+      alert("Passwords do not match, please re-enter");
     }
   };
 
@@ -66,6 +72,11 @@ const RegisterForm = (props) => {
         console.log("Error:", error);
       });
   };
+
+  function validateEmail(email) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
 
   return (
     <div
