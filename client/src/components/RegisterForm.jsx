@@ -58,7 +58,7 @@ const RegisterForm = (props) => {
     }
   };
 
-  const loginHandler = () => {
+  const loginHandler = (event) => {
     if (loginData.username && loginData.password) {
       fetch("/login", {
         method: "POST",
@@ -74,6 +74,7 @@ const RegisterForm = (props) => {
         });
     } else {
       alert("Please fill in both username and password to login");
+      event.preventDefault();
     }
   };
 
