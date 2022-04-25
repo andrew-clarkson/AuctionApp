@@ -72,6 +72,8 @@ const RegisterForm = (props) => {
         .catch((error) => {
           console.log("Error:", error);
         });
+    } else {
+      alert("Please fill in both username and password to login");
     }
   };
 
