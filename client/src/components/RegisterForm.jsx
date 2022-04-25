@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
 const RegisterForm = (props) => {
-  const [loginData, setLoginData] = useState();
-  const [registerData, setRegisterData] = useState();
+  const [loginData, setLoginData] = useState("");
+  const [registerData, setRegisterData] = useState("");
 
   // const [passcheck, setPasscheck] = useState(false);
 
@@ -14,7 +14,6 @@ const RegisterForm = (props) => {
         [name]: value,
       };
     });
-    console.log(registerData);
   };
 
   const loginChangeHandler = (event) => {
@@ -28,33 +27,40 @@ const RegisterForm = (props) => {
     // console.log(loginData);
   };
 
-  const registerHandler = () => {
-    if (registerData.password === registerData.passwordcheck) {
-      console.log("passwords match");
-      if (validateEmail) {
-        console.log("email valid");
-        let newUser = {
-          username: registerData.username,
-          password: registerData.password,
-        };
+  const registerHandler = (event) => {
+    if (registerData.username && registerData.password) {
+      if (registerData.password === registerData.passwordcheck) {
+        console.log("passwords match");
+        if (validateEmail) {
+          console.log("email valid");
+          let newUser = {
+            username: registerData.username,
+            password: registerData.password,
+          };
 
-        fetch("/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(newUser),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("Success:", data);
+          fetch("/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newUser),
           })
-          .catch((error) => {
-            console.log("Error:", error);
-          });
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Success:", data);
+            })
+            .catch((error) => {
+              console.log("Error:", error);
+            });
+        } else {
+          alert("That is not a valid email, try again.");
+          event.preventDefault();
+        }
       } else {
-        alert("That is not a valid email, try again.");
+        alert("Passwords do not match, please re-enter");
+        event.preventDefault();
       }
     } else {
-      alert("Passwords do not match, please re-enter");
+      alert("Please fill in both username and password(x2) to register");
+      event.preventDefault();
     }
   };
 
