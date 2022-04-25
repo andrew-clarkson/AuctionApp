@@ -20,7 +20,8 @@ const uri = process.env.MONGO_URI;
 const PORT = process.env.PORT || 3001;
 let userDetails = {};
 
-let URL = "https://react-auction-app.herokuapp.com";
+// using config vars to handle multiple environments for now
+let URL = process.env.URL;
 
 if (process.env.NODE_ENV !== "production") {
   console.log("not prod");
